@@ -1,0 +1,15 @@
+### Compiled output
+dist
+/build
+/tmp
+/out-tsc
+
+### Dependencies
+node_modules
+
+### Logs
+*.log
+
+### System Files
+.DS_Store
+Thumbs.db

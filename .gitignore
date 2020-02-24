@@ -1,5 +1,6 @@
 ### Compiled output
 dist
+/lib
 /build
 /tmp
 /out-tsc

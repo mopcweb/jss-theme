@@ -1,0 +1,8 @@
+### Directories
+src
+
+### Files
+tsconfig.json
+.eslintrc
+.eslintignore
+updateReadme.ts

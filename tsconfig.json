@@ -12,7 +12,6 @@
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "removeComments": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
     "outDir": "./lib",

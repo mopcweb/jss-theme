@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet, Styles } from 'jss';
 
 export { Classes, Styles } from 'jss';
@@ -6,21 +7,23 @@ export { Classes, Styles } from 'jss';
 /**
  *  Class constructior type
  */
-/* eslint-disable-next-line */
 export type Constructor<T = any> = new (...args: any[]) => T;
 
 /**
- *  Jss theme object type
- *  TODO: research which options to include. For this purpose to look through MUI theme interface
+ *  Jss theme object type.
+ *
+ *  This one could really be of any type: Array, Object, primitive.
+ *  Just when creating Theme instance be sure to provide correct typing for avoiding bugs in your application.
  */
-export interface JssTheme {
-  spacing?: number;
-}
+// export interface JssTheme {
+//   [x: string]: any;
+// }
+export type JssTheme = any;
 
 /**
  *  Interface for Jss theme object
  */
-export type JssStyles = ((theme: JssTheme) => Styles) | Styles;
+export type JssStyles<T extends JssTheme = JssTheme> = ((theme: T) => Styles) | Styles;
 
 /**
  *  Interface for Cached styles

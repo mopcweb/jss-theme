@@ -1,5 +1,5 @@
 import jss, { Classes, Styles, StyleSheetFactoryOptions } from 'jss';
-import { isEqual, cloneDeep } from 'lodash';
+import { isEqual, merge, cloneDeep } from 'lodash';
 
 import { isFunction } from './helpers';
 import { JssTheme, JssCache, JssStyles } from './typings';
@@ -86,11 +86,13 @@ export class Theme<T extends JssTheme = JssTheme> {
       throw new Error('For updating theme themeConfig and styles are required');
     }
 
-    if (isEqual(this._theme, { ...this._theme, ...themeConfig })) {
+    const updated = merge(cloneDeep(this._theme), themeConfig);
+
+    if (isEqual(this._theme, updated)) {
       return this.useStyles(styles);
     }
 
-    this._theme = { ...this._theme, ...themeConfig };
+    this._theme = updated;
 
     this._cache.forEach((value, key) => {
       if (value.isStatic) return;

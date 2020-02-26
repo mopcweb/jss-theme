@@ -1,7 +1,8 @@
 
+
 # JSS Theming Solution
 
-[![GitHub version](https://img.shields.io/badge/version-0.2.1-yellow.svg)](https://github.com/mopcweb/jss-theme/releases) [![npm version](https://img.shields.io/npm/v/jss-theme.svg)](https://www.npmjs.com/package/jss-theme) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mopcweb/jss-theme/blob/master/LICENSE)
+[![GitHub version](https://img.shields.io/badge/version-0.2.2-yellow.svg)](https://github.com/mopcweb/jss-theme/releases) [![npm version](https://img.shields.io/npm/v/jss-theme.svg)](https://www.npmjs.com/package/jss-theme) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mopcweb/jss-theme/blob/master/LICENSE)
 
 Inspired by React MUI theming solution in order to implement something like that for Angular projects.
 
@@ -21,11 +22,15 @@ First of all call this method first to init JSS with default preset and optional
 
 ### new Theme(themeConfig?, options?)
 
-Creates new theme, which could be used in components. Theme has following methods:
+Creates new theme, which could be used in components.
+Constructor gets 2 arguments: theme config for new Theme instance and optional default options for creating new stylesheets.
+Each Theme instance has following methods:
 
  - __getTheme() => JssTheme__
 	Returns current theme value;
- - __hasStylesInCache(styles:) => boolean__
+ - __updateDefaultOptions(options) => void__
+	Updates default options for creating new stylesheets
+ - __hasStylesInCache(styles) => boolean__
 	Checks if provided styles are cached. Necessary for checking for theme dependent styles updates;
  - __createTheme(themeConfig?) => JssTheme__
 	If thee were no themeConfig provided in class constructor, here it is possible to create initial theme;
@@ -46,6 +51,7 @@ SomeTheme.createTheme({ spacing: 8 });
 
 // Methods
 const theme = SomeTheme.getTheme();
+SomeTheme.updateDefaultOptions({ ... });
 const styles = SomeTheme.makeStyles((theme) => ({
 	calssName: { margin: theme.spacing }
 }))
@@ -55,10 +61,12 @@ const classes = SomeTheme.updateTheme({ spacing: 1 }, styles);
 
 ## Usage for default Theme. (This are shortcut functions for Theme instance methods)
 
-### createTheme(themeConfig, theme?) => JssTheme
+### createTheme(themeConfig, options?, theme?) => JssTheme
 This will create initial default theme. This method could be called only once upon each Theme instance.
 
-Second optional argument could be used to call this method on specific Theme instance:
+Second optional argument provides default options for creating new stylesheets.
+
+Third optional argument could be used to call this method on specific Theme instance:
 
 ```ts
 import { createTheme, JssTheme, Theme } from 'jss-theme';
@@ -69,8 +77,8 @@ const themeConfig: JssTheme = {
 
 const SomeTheme = new Theme();
 
-createTheme(themeConfig); // Specific Theme
-createTheme(themeConfig, SomeTheme); // Default Theme
+createTheme(themeConfig, null, SomeTheme); // Specific Theme
+createTheme(themeConfig); // Default Theme
 ```
 
 ### makeStyles(styles) => JssStyles
@@ -95,10 +103,13 @@ const styles = makeStyles((theme) => ({
 }));
 ```
 
-### useStyles(styles) => Classes
+### useStyles(styles, options?, theme?) => Classes
 
 This one should be called with styles object or theme function (which could be written manually or via makeStyles method) and returns classes object, which could be used in components.
-Second optional argument could be used to call this method on specific Theme instance.
+
+Second optional argument provides default options for creating new stylesheets.
+
+Third optional argument could be used to call this method on specific Theme instance:
 
 Example with Angular component:
 ```ts
@@ -121,17 +132,19 @@ export class SomeComponent implements OnInit {
 			},
 		});
 
-		this.classes = useStyles(styles, SomeTheme); // Specific Theme
+		this.classes = useStyles(styles, null, SomeTheme); // Specific Theme
 		this.classes = useStyles(styles); // Default Theme		
 	}
 }
 ```
 
-### updateTheme(themeConfig, styles, theme?) => Classes
+### updateTheme(themeConfig, styles, options?, theme?) => Classes
 
 This method updates current theme. After theme was updated, it will detach (remove from DOM) all theme dependent stylesheets, so if using this method in component with theme dependent styles it is IMPORTANT to provide styles for creating new sheet.
 
-Third optional argument could be used to call this method on specific Theme instance:
+Third optional argument provides default options for creating new stylesheets.
+
+Fourth optional argument could be used to call this method on specific Theme instance:
 
 ```ts
 import { makeStyles, updateTheme, Theme } from 'jss-theme';
@@ -140,14 +153,16 @@ const SomeTheme = new Theme({ spacing: 1 });
 
 ...
 
-this.classes = updateTheme({ spacing: 10 }, styles, SomeTheme); // Specific Theme
+this.classes = updateTheme({ spacing: 10 }, styles, null, SomeTheme); // Specific Theme
 this.classes = updateTheme({ spacing: 10 }, styles); // Default Theme
 ```
 
-### @StyledComponent(styles, theme?)
+### @StyledComponent(styles, options?, theme?)
 Decorator for usage with Angular component. Internally creates property 'classes' and puts classNames for compiled styles into it.
 
-Second optional argument could be used to call decorator with specific Theme instance:
+Second optional argument provides default options for creating new stylesheets.
+
+Third optional argument could be used to call this method on specific Theme instance:
 
 ```ts
 import { Component, OnInit } from '@angular/core';
@@ -166,7 +181,7 @@ const styles = makeStyles({
 	template: `<div [class]="classes.className1">Jss styled div</div>`,
 	...
 })
-@StyledComponent(styles, Theme) // Specific Theme
+@StyledComponent(styles, null, Theme) // Specific Theme
 @StyledComponent(styles) // Default Theme
 export class SomeComponent implements OnInit {
 }
@@ -199,6 +214,21 @@ const styles = makeStyles((theme) => ({
 	},
 }));
 const classes = useStyles(styles);
+```
+
+### updateDefaultOptions(options, theme?)
+
+Updates default options for creating new stylesheets
+
+Second optional argument could be used to call this method on specific Theme instance:
+
+```ts
+import { updateDefaultOptions, Theme } from 'jss-theme';
+
+const SomeTheme = new Theme({ spacing: 1 });
+
+updateDefaultOptions({ ... }, SomeTheme) // Custom theme
+updateDefaultOptions({ ... }) // Default theme
 ```
 
 ## License

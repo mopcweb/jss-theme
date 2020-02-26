@@ -12,12 +12,9 @@ export type Constructor<T = any> = new (...args: any[]) => T;
 /**
  *  Jss theme object type.
  *
- *  This one could really be of any type: Array, Object, primitive.
+ *  This one could really be of any type: Array, Object, primitive ...
  *  Just when creating Theme instance be sure to provide correct typing for avoiding bugs in your application.
  */
-// export interface JssTheme {
-//   [x: string]: any;
-// }
 export type JssTheme = any;
 
 /**

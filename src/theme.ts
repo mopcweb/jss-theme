@@ -23,6 +23,10 @@ export class Theme<T extends JssTheme = JssTheme> {
    */
   private _cache: Map<string, JssCache> = new Map();
 
+  /**
+   *  @param themeConfig - Theme options for creation
+   *  @param [options] - Default options for creating new stylesheets
+   */
   public constructor(themeConfig?: T, options?: StyleSheetFactoryOptions) {
     if (themeConfig) this._theme = themeConfig;
     if (options) this._options = options;
@@ -36,6 +40,15 @@ export class Theme<T extends JssTheme = JssTheme> {
   }
 
   /**
+   *  Updates default options for creating new stylesheets
+   *
+   *  @param options - Default options for creating new stylesheets
+   */
+  public updateDefaultOptions(options: StyleSheetFactoryOptions): void {
+    if (options) this._options = options;
+  }
+
+  /**
    *  Defines whether theme is equal to currently set one
    *
    *  @param theme - Theme to check if it is equal to current
@@ -45,7 +58,7 @@ export class Theme<T extends JssTheme = JssTheme> {
   }
 
   /**
-   *  Defines whether classes are equal to that one, attached to DOM
+   *  Checks if provided styles are in cache
    *
    *  @param styles - Styles to compile. Could be a function which uses theme
    */
@@ -59,14 +72,17 @@ export class Theme<T extends JssTheme = JssTheme> {
   /**
    *  Creates initital theme. Could be used only once.
    *
-   *  @param themeConfig - Theme options overrides
+   *  @param themeConfig - Theme options for creation
+   *  @param [options] - Default options for creating new stylesheets
    */
-  public createTheme(themeConfig: T): T {
+  public createTheme(themeConfig: T, options?: StyleSheetFactoryOptions): T {
     if (this._theme) {
       throw new Error('Theme was already created. To update it consider using updateTheme');
     }
 
     this._theme = cloneDeep(themeConfig);
+
+    if (options) this._options = options;
 
     return this._theme;
   }
@@ -75,9 +91,10 @@ export class Theme<T extends JssTheme = JssTheme> {
    *  Updates current theme wtih new options. Detaches from DOM all cached styles, which uses
    *  theme as provider for some values
    *
-   *  @param overrides - Theme options overrides
+   *  @param themeConfig - Theme options overrides
    *  @param styles - If this method is called in component it is necessary to provide styles
    *  for compilation. This will return classes for component usage (aka useStyles method)
+   *  @param [options] - Options for creating new stylesheet
    */
   public updateTheme(
     themeConfig: Partial<T>, styles: JssStyles<T>, options?: StyleSheetFactoryOptions,
@@ -108,7 +125,7 @@ export class Theme<T extends JssTheme = JssTheme> {
    *  Gets styles, compiles them and attaches to DOM or, if they are already in cache returns cached classes
    *
    *  @param styles - Styles to compile. Could be a function which uses theme
-   *  @param options -
+   *  @param [options] - Options for creating new stylesheet (if it is not cached)
    */
   public useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): Classes {
     const isStatic = !isFunction(styles);
@@ -144,7 +161,6 @@ export class Theme<T extends JssTheme = JssTheme> {
       throw new Error(
         'For creating stylesheet dependant on theme variables it is necessary to create Theme first',
       );
-      // this.createTheme();
     }
 
     return typeof styles === 'object' ? styles : styles(this._theme);

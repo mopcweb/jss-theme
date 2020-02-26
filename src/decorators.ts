@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable indent */
 /* eslint-disable max-classes-per-file */
 import { Classes } from 'jss';
 
@@ -16,8 +15,37 @@ import { useStyles, hasStylesInCache } from './functions';
  *
  *  @param styles - Styles to compile. Could be a function which uses theme
  */
+export function StyledComponent<T extends JssTheme = JssTheme>(
+  styles: JssStyles<T>, theme?: Theme,
+) {
+  return (Class: Constructor, ...args: any[]): Constructor => (isFunction(styles)
+    ? class extends Class {
+      public classes: Classes = {};
 
-// isFunction
+      public ngOnInit(): void {
+        this.classes = useStyles(styles, theme);
+
+        if (Class.prototype.ngOnInit) Class.prototype.ngOnInit.apply(this, args);
+      }
+
+      public ngDoCheck(): void {
+        if (!hasStylesInCache(styles, theme)) {
+          this.classes = useStyles(styles, theme);
+        }
+
+        if (Class.prototype.ngDoCheck) Class.prototype.ngDoCheck.apply(this, args);
+      }
+    }
+    : class extends Class {
+      public classes: Classes = {};
+
+      public ngOnInit(): void {
+        this.classes = useStyles(styles, theme);
+
+        if (Class.prototype.ngOnInit) Class.prototype.ngOnInit.apply(this, args);
+      }
+    });
+}
 
 // export const StyledComponent = <T extends JssTheme = JssTheme>(
 //   styles: JssStyles<T>, theme?: Theme,
@@ -38,33 +66,3 @@ import { useStyles, hasStylesInCache } from './functions';
 //     if (Class.prototype.ngDoCheck) Class.prototype.ngDoCheck.apply(this, args);
 //   }
 // };
-
-export const StyledComponent = <T extends JssTheme = JssTheme>(
-  styles: JssStyles<T>, theme?: Theme,
-) => (Class: Constructor, ...args: any[]): Constructor => (isFunction(styles)
-  ? class extends Class {
-    public classes: Classes = {};
-
-    public ngOnInit(): void {
-      this.classes = useStyles(styles, theme);
-
-      if (Class.prototype.ngOnInit) Class.prototype.ngOnInit.apply(this, args);
-    }
-
-    public ngDoCheck(): void {
-      if (!hasStylesInCache(styles, theme)) {
-        this.classes = useStyles(styles, theme);
-      }
-
-      if (Class.prototype.ngDoCheck) Class.prototype.ngDoCheck.apply(this, args);
-    }
-  }
-  : class extends Class {
-    public classes: Classes = {};
-
-    public ngOnInit(): void {
-      this.classes = useStyles(styles, theme);
-
-      if (Class.prototype.ngOnInit) Class.prototype.ngOnInit.apply(this, args);
-    }
-  });

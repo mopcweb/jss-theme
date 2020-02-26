@@ -57,6 +57,7 @@ const classes = SomeTheme.updateTheme({ spacing: 1 }, styles);
 
 ### createTheme(themeConfig, theme?) => JssTheme
 This will create initial default theme. This method could be called only once upon each Theme instance.
+
 Second optional argument could be used to call this method on specific Theme instance:
 
 ```ts
@@ -73,6 +74,7 @@ createTheme(themeConfig, SomeTheme); // Default Theme
 ```
 
 ### makeStyles(styles) => JssStyles
+
 This is just helper function which provides correct type definitions and intellisense either calling with theme function or styles object.
 
 ```ts
@@ -94,6 +96,7 @@ const styles = makeStyles((theme) => ({
 ```
 
 ### useStyles(styles) => Classes
+
 This one should be called with styles object or theme function (which could be written manually or via makeStyles method) and returns classes object, which could be used in components.
 Second optional argument could be used to call this method on specific Theme instance.
 
@@ -125,6 +128,7 @@ export class SomeComponent implements OnInit {
 ```
 
 ### updateTheme(themeConfig, styles, theme?) => Classes
+
 This method updates current theme. After theme was updated, it will detach (remove from DOM) all theme dependent stylesheets, so if using this method in component with theme dependent styles it is IMPORTANT to provide styles for creating new sheet.
 
 Third optional argument could be used to call this method on specific Theme instance:

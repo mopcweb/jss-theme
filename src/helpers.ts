@@ -44,6 +44,26 @@ export const replaceKey = <T extends Record<string, any> = Record<string, any>>(
 };
 
 /**
+ *  Creates hash for provided string.
+ *  JS implementation of Java's String.hashCode() method.
+ *
+ *  @param str - String to create hash for
+ */
+/* eslint-disable no-bitwise */
+export const createHash = (str: string): number => {
+  let hash = 0;
+  if (str.length === 0) return hash;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash &= hash; // Convert to 32bit integer
+  }
+
+  return hash;
+};
+/* eslint-enable no-bitwise */
+
+/**
  *  Mixin for font property usage
  *
  *  @param theme - Current theme

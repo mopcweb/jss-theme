@@ -1,7 +1,9 @@
 import jss, { Classes, Styles, StyleSheetFactoryOptions } from 'jss';
 import { isEqual, merge, cloneDeep } from 'lodash';
 
-import { isFunction, replaceKey, fontMixin, paletteItemComposer, breakpointsComposer } from './helpers';
+import {
+  isFunction, replaceKey, fontMixin, paletteItemComposer, breakpointsComposer, createHash,
+} from './helpers';
 import {
   JssTheme, JssCache, JssStyles, Replacer, DefaultTheme, ThemeTypographyItems,
 } from './typings';
@@ -243,8 +245,8 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @see :first-of-type
    */
   private _replacer: Replacer | Replacer[] = [
-    { pattern: ':first-of-type', value: ':nth-of-type(2)' },
-    { pattern: ':first-child', value: ':nth-child(2)' },
+    { pattern: ':first-of-type', value: ':nth-of-type(1)' },
+    { pattern: ':first-child', value: ':nth-child(1)' },
   ];
 
   /**
@@ -258,10 +260,7 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @param [replacer] - Default replacer for theme styles
    */
   public constructor(themeConfig?: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]) {
-    // if (themeConfig) this._theme = cloneDeep(themeConfig);
-    if (themeConfig) this._theme = cloneDeep(merge(this._theme, themeConfig));
-    if (options) this._options = cloneDeep(options);
-    if (replacer) this._replacer = cloneDeep(replacer);
+    this.createTheme(themeConfig, options, replacer);
   }
 
   /**
@@ -297,6 +296,10 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @param theme - Theme to check if it is equal to current
    */
   public isEqualTheme(theme: T): boolean {
+    if (theme.updatedHash && this._theme.updatedHash) {
+      return isEqual(theme.updatedHash, this._theme.updatedHash);
+    }
+
     return isEqual(theme, this._theme);
   }
 
@@ -321,12 +324,15 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @param [replacer] - Default replacer for theme styles
    */
   public createTheme(themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]): T {
-    if (this._theme) {
+    if (this._theme.updatedHash) {
       throw new Error('Theme was already created. To update it consider using updateTheme');
     }
 
-    this._theme = cloneDeep(themeConfig);
-
+    if (themeConfig) {
+      // this._theme = cloneDeep(themeConfig);
+      this._theme = cloneDeep(merge(this._theme, themeConfig));
+      this._theme.updatedHash = this.createHash();
+    }
     if (options) this._options = cloneDeep(options);
     if (replacer) this._replacer = cloneDeep(replacer);
 
@@ -354,6 +360,7 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
     }
 
     this._theme = updated;
+    this._theme.updatedHash = this.createHash();
 
     this._cache.forEach((value, key) => {
       if (value.isStatic) return;
@@ -428,5 +435,12 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    */
   private createCacheKey(computedStyles: JssStyles<T>): string {
     return JSON.stringify(computedStyles);
+  }
+
+  /**
+   *  Creates hash for update string
+   */
+  private createHash(): number {
+    return createHash(new Date().toISOString());
   }
 }

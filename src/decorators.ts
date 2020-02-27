@@ -5,7 +5,7 @@ import { Classes, StyleSheetFactoryOptions } from 'jss';
 import { JssStyles, JssTheme, Constructor } from './typings';
 import { isFunction } from './helpers';
 import { Theme } from './theme';
-import { useStyles, hasStylesInCache } from './functions';
+import { useStyles, isEqualTheme, getTheme } from './functions';
 
 /**
  *  Decorator for injecting styles into component.
@@ -24,14 +24,18 @@ export function StyledComponent<T extends JssTheme = JssTheme>(
     ? class extends Class {
       public classes: Classes = {};
 
+      private _cachedTheme: T;
+
       public ngOnInit(): void {
+        this._cachedTheme = getTheme(theme);
         this.classes = useStyles(styles, options, theme);
 
         if (Class.prototype.ngOnInit) Class.prototype.ngOnInit.apply(this);
       }
 
       public ngDoCheck(): void {
-        if (!hasStylesInCache(styles, theme)) {
+        if (!isEqualTheme(this._cachedTheme, theme)) {
+          this._cachedTheme = getTheme(theme);
           this.classes = useStyles(styles, options, theme);
         }
 

@@ -309,4 +309,6 @@ export interface DefaultTheme {
   mixins: ThemeMixins;
   transitions: ThemeTransitions;
   zIndex: ThemeZIndex;
+
+  updatedHash?: number;
 }

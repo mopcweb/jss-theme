@@ -298,7 +298,7 @@ export interface ThemeMixins {
  */
 export interface DefaultTheme {
   spacing: number;
-  maxWidth: number;
+  maxWidth: number | string;
   direction: string;
 
   palette: ThemePalette;

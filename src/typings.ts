@@ -10,6 +10,17 @@ export { Classes, Styles } from 'jss';
 export type OneOf<T extends readonly unknown[]> = T extends ReadonlyArray<infer OneOf> ? OneOf : never;
 
 /**
+ *  Type for deep partial
+ */
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends Array<infer U>
+    ? Array<DeepPartial<U>>
+    : T[P] extends ReadonlyArray<infer U>
+      ? ReadonlyArray<DeepPartial<U>>
+      : DeepPartial<T[P]>
+};
+
+/**
  *  Class constructior type
  */
 export type Constructor<T = any> = new (...args: any[]) => T;

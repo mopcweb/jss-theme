@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2015",
+    "target": "es5",
     "alwaysStrict": true,
-    "importHelpers": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "allowSyntheticDefaultImports": true,
@@ -12,13 +11,10 @@
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "resolveJsonModule": true,
     "baseUrl": ".",
     "outDir": "./lib",
-    "skipLibCheck":true,
   },
   "exclude": [
-    "test.ts",
     "**/*.spec.ts"
   ],
   "include": [

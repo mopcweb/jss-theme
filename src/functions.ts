@@ -1,7 +1,7 @@
 import jss, { Classes, JssOptions, StyleSheetFactoryOptions, Jss } from 'jss';
 import preset from 'jss-preset-default';
 
-import { JssTheme, JssStyles, Replacer, DefaultTheme } from './typings';
+import { JssTheme, JssStyles, Replacer, DefaultTheme, DeepPartial } from './typings';
 import { Theme } from './theme';
 
 let DefaultThemeInstance = new Theme();
@@ -37,7 +37,7 @@ export const setDefaultTheme = <T extends Theme>(
  *  @param [replacer] - Default replacer for theme styles
  *  @param [theme] - Constructed custom theme
  */
-export const createTheme = <T extends JssTheme = Partial<DefaultTheme>>(
+export const createTheme = <T extends JssTheme = DeepPartial<DefaultTheme>>(
   themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
   theme: Theme = DefaultThemeInstance,
 ): T => theme.createTheme(themeConfig, options, replacer) as T;
@@ -55,7 +55,7 @@ export const createTheme = <T extends JssTheme = Partial<DefaultTheme>>(
  *  @param [options] - Options for creating new stylesheet
  *  @param [theme] - Constructed custom theme
  */
-export const updateTheme = <T extends JssTheme = Partial<DefaultTheme>>(
+export const updateTheme = <T extends JssTheme = DeepPartial<DefaultTheme>>(
   themeConfig: Partial<T>, theme: Theme = DefaultThemeInstance,
 ): T => theme.updateTheme(themeConfig) as T;
 
@@ -66,7 +66,7 @@ export const updateTheme = <T extends JssTheme = Partial<DefaultTheme>>(
  *  @param [options] - Options for creating new stylesheet (if it is not cached)
  *  @param [theme] - Constructed custom theme
  */
-export const useStyles = <T extends JssTheme = Partial<DefaultTheme>>(
+export const useStyles = <T extends JssTheme = DeepPartial<DefaultTheme>>(
   styles: JssStyles<T>, options?: StyleSheetFactoryOptions, theme: Theme = DefaultThemeInstance,
 ): Classes => theme.useStyles(styles, options);
 
@@ -82,7 +82,7 @@ export const makeStyles = <T extends JssTheme = JssTheme>(styles: JssStyles<T>):
  *
  *  @param [theme] - Constructed custom theme
  */
-export const getTheme = <T extends JssTheme = Partial<DefaultTheme>>(
+export const getTheme = <T extends JssTheme = DeepPartial<DefaultTheme>>(
   theme: Theme = DefaultThemeInstance,
 ): T => theme.getTheme() as T;
 
@@ -92,7 +92,7 @@ export const getTheme = <T extends JssTheme = Partial<DefaultTheme>>(
  *  @param themeConfig - DefaultTheme to check if it is equal to current
  *  @param [theme] - Constructed custom theme
  */
-export const isEqualTheme = <T extends JssTheme = Partial<DefaultTheme>>(
+export const isEqualTheme = <T extends JssTheme = DeepPartial<DefaultTheme>>(
   themeConfig: T, theme: Theme = DefaultThemeInstance,
 ): boolean => theme.isEqualTheme(themeConfig);
 

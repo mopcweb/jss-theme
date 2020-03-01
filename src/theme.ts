@@ -1,5 +1,7 @@
 import jss, { Classes, Styles, StyleSheetFactoryOptions } from 'jss';
-import { isEqual, merge, cloneDeep } from 'lodash';
+import merge from 'lodash.merge';
+import cloneDeep from 'lodash.clonedeep';
+import isEqual from 'lodash.isequal';
 
 import {
   isFunction, replaceKey, fontMixin, paletteItemComposer, breakpointsComposer, createHash,
@@ -296,6 +298,10 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @param theme - Theme to check if it is equal to current
    */
   public isEqualTheme(theme: T): boolean {
+    if (!theme) {
+      throw Error('Please provide theme for checking its equality');
+    }
+
     if (theme.updatedHash && this._theme.updatedHash) {
       return isEqual(theme.updatedHash, this._theme.updatedHash);
     }
@@ -309,6 +315,10 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @param styles - Styles to compile. Could be a function which uses theme
    */
   public hasStylesInCache(styles: JssStyles<T>): boolean {
+    if (!styles) {
+      throw Error('Please provide styles object or function');
+    }
+
     const computedStyles = this.convertStylesToObject(styles);
     const key = this.createCacheKey(computedStyles);
 
@@ -379,6 +389,10 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @param [options] - Options for creating new stylesheet (if it is not cached)
    */
   public useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): Classes {
+    if (!styles) {
+      throw Error('Please provide styles object or function');
+    }
+
     const isStatic = !isFunction(styles);
     let computedStyles = this.convertStylesToObject(styles);
     const key = this.createCacheKey(computedStyles);

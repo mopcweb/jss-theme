@@ -2,6 +2,7 @@
 src
 
 ### Files
+webpack.config.json
 tsconfig.json
 .eslintrc
 .eslintignore

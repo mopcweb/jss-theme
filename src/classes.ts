@@ -17,7 +17,7 @@ import { getTheme, useStyles, isEqualTheme } from './functions';
  *  @param [options] - Options for creating new stylesheet
  *  @param [theme] - Constructed custom theme
  */
-export class StyledClass<T extends JssTheme = DefaultTheme> {
+export class NgStyledComponent<T extends JssTheme = DefaultTheme> {
   public classes: Classes = {};
 
   private _styles!: JssStyles;

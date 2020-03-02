@@ -2,8 +2,9 @@
 src
 
 ### Files
-webpack.config.json
+webpack.config.js
 tsconfig.json
 .eslintrc
 .eslintignore
-updateReadme.ts
+.editorconfig
+scripts.ts

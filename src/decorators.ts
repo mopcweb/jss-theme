@@ -18,6 +18,7 @@ import { useStyles, isEqualTheme, getTheme } from './functions';
  *  @param [theme] - Constructed custom theme
  */
 export function StyledComponent<T extends JssTheme = JssTheme>(
+// export function NgStyled<T extends JssTheme = JssTheme>(
   styles: JssStyles<T>, options?: StyleSheetFactoryOptions, theme?: Theme,
 ) {
   return (Class: Constructor): Constructor => (isFunction(styles)

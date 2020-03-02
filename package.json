@@ -7,12 +7,14 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "clean": "rm -rf lib dist",
-    "readme": "./node_modules/.bin/ts-node updateReadme.ts",
-    "write": "./node_modules/.bin/ts-node updateBundle.ts",
-    "dryPublish": "npm publish --dry-run",
+    "scripts": "./node_modules/.bin/ts-node scripts.ts",
+    "drp": "npm publish --dry-run",
     "tsc": "npm run lint && npm run clean && ./node_modules/.bin/tsc",
-    "build": "npm run lint && npm run clean && webpack && npm run write && npm run dryPublish",
-    "release": "npm run readme && npm run build && npm publish"
+    "build": "npm run lint && npm run clean && webpack",
+    "prepublishOnly": "npm run build && npm run scripts",
+    "preversion": "npm run lint",
+    "version": "npm run build && npm run scripts && git add .",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [
     "jss",

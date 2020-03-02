@@ -34,7 +34,6 @@
     "no-underscore-dangle": "off",
 
     # If there is no this. call in method -> make it static.
-    # TODO: research if we can keep this rule
     "class-methods-use-this": "off",
 
     # For objects with more than 3 params.
@@ -52,13 +51,8 @@
     # Allow continue as we decided to allow ForOfStatement
     "no-continue": "off",
 
-    # ########################## SPECIFICALLY TO NODE (BACKEND) ##########################
-
+    # Specifically to node
     "no-console": "off",
-
-    # #################################### TO DISCUSS ####################################
-    # Readability. Subjective. If {} \n else {}
-    # "brace-style": ["error", "stroustrup"],
 
     # They are fine sometimes.
     # "no-nested-ternary": "off"
@@ -70,8 +64,6 @@
     {
       "files": ["*.ts", "*.tsx"],
       "rules": {
-        # ################################ SPECIFICALLY TO TS ################################
-
         # To allow method overloading
         "no-dupe-class-members": "off",
 

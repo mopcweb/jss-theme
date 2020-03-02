@@ -143,28 +143,36 @@ export interface ThemePalette {
  */
 export interface ThemeTypographyItem {
   fontFamily: string;
-  fontWeight: string | number;
-  fontSize: string;
-  lineHeight: number;
-  letterSpacing?: string;
+  fontWeight: number | string;
+  fontSize: number | string;
+  lineHeight: number | string;
+  // letterSpacing?: string;
 
-  use: () => string;
+  // use: () => string;
 }
 
+/**
+ *  Interface for Theme typography available items
+ */
 export type ThemeTypographyItems = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'subtitle1' | 'subtitle2' | 'body1' | 'body2' | 'button' | 'label' | 'hint';
 
 /**
- *  Interface for Theme Typography
+ *  Interface for Theme typography creation config
  */
-export interface ThemeTypography {
-  fontFamily: string;
-  htmlFontSize: number;
-  fontSize: number;
-  fontWeightLight: number;
-  fontWeightRegular: number;
-  fontWeightMedium: number;
-  fontWeightBold: number;
+export interface ThemeTypographyDefaults {
+  fontFamily?: string;
+  htmlFontSize?: number;
+  // fontSize?: number;
+  fontWeightLight?: number | string;
+  fontWeightRegular?: number | string;
+  fontWeightMedium?: number | string;
+  fontWeightBold?: number | string;
+}
 
+/**
+ *  Interface for Theme typography
+ */
+export interface ThemeTypography extends Required<ThemeTypographyDefaults> {
   h1: ThemeTypographyItem;
   h2: ThemeTypographyItem;
   h3: ThemeTypographyItem;
@@ -178,13 +186,11 @@ export interface ThemeTypography {
   body1: ThemeTypographyItem;
   body2: ThemeTypographyItem;
 
-  button: ThemeTypographyItem;
+  button: ThemeTypographyItem & { textTransform: string };
 
   label: ThemeTypographyItem;
 
   hint: ThemeTypographyItem;
-
-  // caption?: ThemeTypographyItem;
 }
 
 /**
@@ -227,6 +233,24 @@ export interface ThemeBreakpoints {
  *  Interface for Theme shadows
  */
 export type ThemeShadows = string[];
+
+
+/**
+ *  Interface for Theme shadow object config
+ */
+export interface ThemeShadowObject {
+  inset?: boolean;
+  x?: number;
+  y?: number;
+  blur?: number;
+  spread?: number;
+  color?: string;
+}
+
+/**
+ *  Interface for Theme shadow array (tuple) config
+ */
+export type ThemeShadowTuple = [number?, number?, number?, number?, string?, boolean?];
 
 /**
  *  Interface for Theme shape options
@@ -287,7 +311,7 @@ export interface ThemeMixins {
    *  @param [delay] - Transition delay
    *  @param [prop] - Property for which transition to add
    */
-  transition: (transition: string, duration?: number, delay?: number, prop?: string) => string;
+  transition: (transition: string, duration?: number | string, delay?: number | string, prop?: string) => string;
 
   /**
    *  Makes provided HEX color transparency for specified value
@@ -298,6 +322,21 @@ export interface ThemeMixins {
    *  @param opacity - Degree of opacity
    */
   transparent: (color: string, opacity?: string) => string;
+
+  /**
+   *  Creates shadow(s) using provided list of config values
+   *
+   *  @param shadows - List of shadows config in form of objects or tuples
+   */
+  boxShadow: (...shadows: Array<ThemeShadowTuple | ThemeShadowObject>) => string;
+
+  /**
+   *  Mixin for font property usage
+   *
+   *  @param size - Size to convert into rem
+   *  @param htmlFontSize - Html tag font size
+   */
+  pxToRem: (size: number, htmlFontSize: number) => string;
 }
 
 /**

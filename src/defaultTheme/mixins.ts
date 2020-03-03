@@ -1,5 +1,6 @@
 import { JssTheme, ThemeTypographyItems, ThemeMixins } from '../typings';
 import { createShadows } from './createShadows';
+import { fade, darken, lighten, getContrastColor } from './colorManipulator';
 
 /**
  *  Mixin for font property usage
@@ -23,8 +24,14 @@ export const pxToRem = (size: number, htmlFontSize: number): string => `${(size 
 
 /* eslint-disable-next-line */
 export const createMixins = (Theme: any): ThemeMixins => ({
+  fade,
+  getContrastColor,
+  darken: (color: string, coef = Theme.getTheme().palette.tonalOffset): string => darken(color, coef),
+  lighten: (color: string, coef = Theme.getTheme().palette.tonalOffset): string => lighten(color, coef),
   gradient: (dir: string, ...breakpoints: string[]): string => `linear-gradient(${dir}, ${breakpoints})`,
-  spacing: (units: number): number => units * Theme.getTheme().spacing,
+  spacing: (
+    ...units: number[]
+  ): string => units.map((item) => `${item * Theme.getTheme().spacing}px`).join(' '),
   border: (units = 1, color = Theme.getTheme().palette.grey[400]): string => `${units}px solid ${color}`,
   font: (prop: ThemeTypographyItems): string => fontMixin(Theme.getTheme(), prop),
   transition: (
@@ -32,7 +39,7 @@ export const createMixins = (Theme: any): ThemeMixins => ({
   ): string => `${prop} ${typeof duration === 'string'
     ? duration
     : `${duration}s`} ${transition} ${typeof delay === 'string' ? delay : `${delay}s`}`,
-  transparent: (color: string, opacity = '80'): string => `${color}${opacity}`,
+  // transparent: (color: string, opacity = '80'): string => `${color}${opacity}`,
   boxShadow: createShadows,
   pxToRem: (size: number): string => pxToRem(size, Theme.getTheme().typography.htmlFontSize),
 });

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable max-len */
 import { StyleSheet, Styles } from 'jss';
 
 export { Classes, Styles } from 'jss';
@@ -61,13 +62,28 @@ export interface JssCache {
   sheet: StyleSheet;
 }
 
-/* eslint-disable @typescript-eslint/interface-name-prefix */
-/* eslint-disable max-len */
+/**
+ *  Interface for theme color types
+ */
+export type ThemeColorTypes = 'rgb' | 'rgba' | 'hsl' | 'hsla';
 
 /**
- *  Inteface for Theme Item
+ *  Interface for theme color manipulator color object
  */
-export interface ThemePaletteItem {
+export interface ThemeColorObject {
+  type: ThemeColorTypes;
+  values: number[];
+}
+
+/**
+ *  Interface for default palette types (themes)
+ */
+export type ThemePaletteType = 'light' | 'dark';
+
+/**
+ *  Inteface for Theme palette color
+ */
+export interface ThemePaletteColor {
   light: string;
   main: string;
   dark: string;
@@ -75,66 +91,95 @@ export interface ThemePaletteItem {
 }
 
 /**
+ *  Inteface for Theme palette common colors
+ */
+export interface ThemePaletteCommon {
+  black: string;
+  white: string;
+}
+
+/**
+ *  Inteface for Theme palette shadows of grey colors
+ */
+export interface ThemePaletteGrey {
+  50: string;
+  100: string;
+  200: string;
+  300: string;
+  400: string;
+  500: string;
+  600: string;
+  700: string;
+  800: string;
+  900: string;
+  A100: string;
+  A200: string;
+  A400: string;
+  A700: string;
+}
+
+/**
+ *  Inteface for Theme palette text colors
+ */
+export interface ThemePaletteText {
+  primary: string;
+  secondary: string;
+  disabled: string;
+  hint: string;
+}
+
+/**
+ *  Inteface for Theme palette background colors
+ */
+export interface ThemePaletteBackground {
+  paper: string;
+  default: string;
+}
+
+/**
+ *  Inteface for Theme palette action colors (colors for different actions)
+ */
+export interface ThemePaletteAction {
+  active: string;
+  hover: string;
+  hoverOpacity: number;
+  selected: string;
+  selectedOpacity: number;
+  disabled: string;
+  disabledBackground: string;
+  disabledOpacity: number;
+  focus: string;
+  focusOpacity: number;
+  activatedOpacity: number;
+}
+
+/**
+ *  Inteface for Theme palette basic colors
+ */
+export interface ThemePaletteBasicColors {
+  text: ThemePaletteText;
+  background: ThemePaletteBackground;
+  action: ThemePaletteAction;
+  divider: string;
+}
+
+/**
  *  Inteface for Theme Palette
  */
 export interface ThemePalette {
-  type: string;
-
-  common: {
-    black: string;
-    white: string;
-  };
-
-  primary: ThemePaletteItem;
-  secondary: ThemePaletteItem;
-  error: ThemePaletteItem;
-  warning: ThemePaletteItem;
-  info: ThemePaletteItem;
-  success: ThemePaletteItem;
-
-  grey: {
-    50: string;
-    100: string;
-    200: string;
-    300: string;
-    400: string;
-    500: string;
-    600: string;
-    700: string;
-    800: string;
-    900: string;
-    A100: string;
-    A200: string;
-    A400: string;
-    A700: string;
-  };
-
-  text: {
-    primary: string;
-    secondary: string;
-    disabled: string;
-    hint: string;
-  };
-
-  background: {
-    paper: string;
-    default: string;
-  };
-
-  action: {
-    active: string;
-    hover: string;
-    hoverOpacity: number;
-    selected: string;
-    selectedOpacity: number;
-    disabled: string;
-    disabledBackground: string;
-    disabledOpacity: number;
-    focus: string;
-    focusOpacity: number;
-    activatedOpacity: number;
-  };
-
+  type: ThemePaletteType;
+  tonalOffset: number;
+  common: ThemePaletteCommon;
+  primary: ThemePaletteColor;
+  secondary: ThemePaletteColor;
+  error: ThemePaletteColor;
+  warning: ThemePaletteColor;
+  info: ThemePaletteColor;
+  success: ThemePaletteColor;
+  grey: ThemePaletteGrey;
+  text: ThemePaletteText;
+  background: ThemePaletteBackground;
+  action: ThemePaletteAction;
   divider: string;
 }
 
@@ -286,7 +331,7 @@ export interface ThemeMixins {
    *
    *  @param units - Amount of units (will be multiplied on current theme spacing)
    */
-  spacing: (units: number) => number;
+  spacing: (...units: number[]) => string;
 
   /**
    *  Creates border with provided width (in standart units) and color
@@ -314,14 +359,41 @@ export interface ThemeMixins {
   transition: (transition: string, duration?: number | string, delay?: number | string, prop?: string) => string;
 
   /**
-   *  Makes provided HEX color transparency for specified value
+   *  Makes provided color transparent for specified value
    *
    *  @see https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4
    *
-   *  @param color - Basic HEX color
+   *  @param color - Basic color: #nnn, #nnnnnn | rgb(a) | hsl(a)
    *  @param opacity - Degree of opacity
    */
-  transparent: (color: string, opacity?: string) => string;
+  fade: (color: string, opacity?: string | number) => string;
+
+  /**
+   *  Darkens a color.
+   *
+   *  @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+   *  @param coef - multiplier in the range 0 - 1
+   */
+  darken: (customColor: string, coef: number) => string;
+
+  /**
+   *  Lightens a color.
+   *
+   *  @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+   *  @param coef - multiplier in the range 0 - 1
+   */
+  lighten: (customColor: string, coef: number) => string;
+
+  /**
+   *  Inverts input color and returns its opposite.
+   *  Optionally could return only black/white colors, defaults to shich also could be specified.
+   *
+   *  @param color - Color: #nnn or #nnnnnn | rgb(a) | hsl(a)
+   *  @param [bw] - Whether to use only black/white contrast colors
+   *  @param [black] - Black default color
+   *  @param [white] - White default color
+   */
+  getContrastColor: (color: string, bw?: boolean, black?: string, white?: string) => string;
 
   /**
    *  Creates shadow(s) using provided list of config values
@@ -336,7 +408,7 @@ export interface ThemeMixins {
    *  @param size - Size to convert into rem
    *  @param htmlFontSize - Html tag font size
    */
-  pxToRem: (size: number, htmlFontSize: number) => string;
+  pxToRem: (size: number) => string;
 }
 
 /**

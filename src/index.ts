@@ -5,8 +5,10 @@ export * from './functions';
 export * from './decorators';
 export * from './classes';
 
+export { fade, darken, lighten, getContrastColor } from './defaultTheme/colorManipulator';
 export * from './defaultTheme/createBreakpoints';
 export * from './defaultTheme/createPalette';
+export { createShadows, createMaterialShadows } from './defaultTheme/createShadows';
 export * from './defaultTheme/createTypography';
-export { createShadows } from './defaultTheme/createShadows';
+export * from './defaultTheme/createZIndex';
 export { pxToRem } from './defaultTheme/mixins';

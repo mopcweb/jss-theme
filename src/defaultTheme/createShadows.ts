@@ -26,11 +26,11 @@ const shadowKeyPenumbraOpacity = 0.14;
 const shadowAmbientShadowOpacity = 0.12;
 
 /**
- *  Creates material design shadow for provided offset values
+ *  Creates material design shadows string for provided offset values
  *
  *  @param px - list of offsets
  */
-const createMaterialShadows = (...px: number[]): string => createShadows(
+export const createMaterialShadows = (...px: number[]): string => createShadows(
   [px[0], px[1], px[2], px[3], `rgba(0,0,0,${shadowKeyUmbraOpacity})`],
   [px[4], px[5], px[6], px[7], `rgba(0,0,0,${shadowKeyPenumbraOpacity})`],
   [px[8], px[9], px[10], px[11], `rgba(0,0,0,${shadowAmbientShadowOpacity})`],

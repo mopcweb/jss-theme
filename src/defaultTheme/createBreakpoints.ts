@@ -1,14 +1,15 @@
-import { OneOf, ThemeBreakpointsKeys, ThemeBreakpoints } from '../typings';
+import { OneOf, ThemeBreakpointsKeys, ThemeBreakpointsValues, ThemeBreakpoints } from '../typings';
 
 /**
  *  Composer for breakpoints
  *
  *  @param [customValues] - Custom values for breakpoints
  */
-export const createBreakpoints = (customValues: number[] = []): ThemeBreakpoints => {
+export const createBreakpoints = (customValues: Partial<ThemeBreakpointsValues> = { }): ThemeBreakpoints => {
   const keys: ThemeBreakpointsKeys = ['xs', 'sm', 'md', 'lg', 'xl'];
-  const mappedValues = customValues.map((item) => (item === null ? undefined : item));
-  const [xs = 0, sm = 600, md = 960, lg = 1280, xl = 1920] = mappedValues;
+  // const mappedValues = customValues.map((item) => (item === null ? undefined : item));
+  // const [xs = 0, sm = 600, md = 960, lg = 1280, xl = 1920] = mappedValues;
+  const { xs = 0, sm = 600, md = 960, lg = 1280, xl = 1920 } = customValues;
   const values: Record<OneOf<ThemeBreakpointsKeys> | string, number> = { xs, sm, md, lg, xl };
 
   const between = (

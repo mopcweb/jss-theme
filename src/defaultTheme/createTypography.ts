@@ -1,4 +1,4 @@
-import { ThemeTypography, ThemeTypographyItem, ThemeTypographyDefaults } from '../typings';
+import { ThemeTypography, ThemeTypographyItem, ThemeTypographyDefaults, ThemeTypographyItems } from '../typings';
 import { pxToRem } from './mixins';
 
 /**
@@ -49,33 +49,81 @@ export const createTypographyDefaults = (
  *  Creates Theme typography
  */
 export const createTypography = (
-  defaults: Required<ThemeTypographyDefaults> = createTypographyDefaults(),
+  defaultConfig: ThemeTypographyDefaults = { },
+  fontSizes: Partial<Record<ThemeTypographyItems, number>> = {},
+  lineHeights: Partial<Record<ThemeTypographyItems | 'basic', number | string>> = {},
 ): ThemeTypography => {
+  /* eslint-disable no-param-reassign */
+  if (!defaultConfig) defaultConfig = {};
+  if (!fontSizes) fontSizes = {};
+  if (!lineHeights) lineHeights = {};
+
+  const defaults = createTypographyDefaults(defaultConfig);
   const { fontFamily, htmlFontSize, fontWeightLight, fontWeightMedium, fontWeightRegular } = defaults;
+  const {
+    h1: h1Font = 96,
+    h2: h2Font = 60,
+    h3: h3Font = 48,
+    h4: h4Font = 34,
+    h5: h5Font = 24,
+    h6: h6Font = 20,
+
+    subtitle1: subtitle1Font = 16,
+    subtitle2: subtitle2Font = 14,
+
+    body1: body1Font = 16,
+    body2: body2Font = 14,
+
+    button: buttonFont = 14,
+
+    label: labelFont = 12,
+
+    hint: hintFont = 12,
+  } = fontSizes;
+  const {
+    h1 = lineHeights.basic || 1.167,
+    h2 = lineHeights.basic || 1.2,
+    h3 = lineHeights.basic || 1.167,
+    h4 = lineHeights.basic || 1.235,
+    h5 = lineHeights.basic || 1.334,
+    h6 = lineHeights.basic || 1.6,
+
+    subtitle1 = lineHeights.basic || 1.75,
+    subtitle2 = lineHeights.basic || 1.57,
+
+    body1 = lineHeights.basic || 1.5,
+    body2 = lineHeights.basic || 1.43,
+
+    button = lineHeights.basic || 1.75,
+
+    label = lineHeights.basic || 1.43,
+
+    hint = lineHeights.basic || 1.43,
+  } = lineHeights;
 
   return {
     ...defaults,
 
-    h1: createTypographyItem(fontFamily, fontWeightLight, pxToRem(96, htmlFontSize), 1.167),
-    h2: createTypographyItem(fontFamily, fontWeightLight, pxToRem(60, htmlFontSize), 1.2),
-    h3: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(48, htmlFontSize), 1.167),
-    h4: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(34, htmlFontSize), 1.235),
-    h5: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(24, htmlFontSize), 1.334),
-    h6: createTypographyItem(fontFamily, fontWeightMedium, pxToRem(20, htmlFontSize), 1.6),
+    h1: createTypographyItem(fontFamily, fontWeightLight, pxToRem(h1Font, htmlFontSize), h1),
+    h2: createTypographyItem(fontFamily, fontWeightLight, pxToRem(h2Font, htmlFontSize), h2),
+    h3: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(h3Font, htmlFontSize), h3),
+    h4: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(h4Font, htmlFontSize), h4),
+    h5: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(h5Font, htmlFontSize), h5),
+    h6: createTypographyItem(fontFamily, fontWeightMedium, pxToRem(h6Font, htmlFontSize), h6),
 
-    subtitle1: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(16, htmlFontSize), 1.75),
-    subtitle2: createTypographyItem(fontFamily, fontWeightMedium, pxToRem(14, htmlFontSize), 1.57),
+    subtitle1: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(subtitle1Font, htmlFontSize), subtitle1),
+    subtitle2: createTypographyItem(fontFamily, fontWeightMedium, pxToRem(subtitle2Font, htmlFontSize), subtitle2),
 
-    body1: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(16, htmlFontSize), 1.5),
-    body2: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(14, htmlFontSize), 1.43),
+    body1: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(body1Font, htmlFontSize), body1),
+    body2: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(body2Font, htmlFontSize), body2),
 
     button: {
-      ...createTypographyItem(fontFamily, fontWeightMedium, pxToRem(14, htmlFontSize), 1.75),
+      ...createTypographyItem(fontFamily, fontWeightMedium, pxToRem(buttonFont, htmlFontSize), button),
       textTransform: 'uppercase',
     },
 
-    label: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(12, htmlFontSize), 1.43),
+    label: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(labelFont, htmlFontSize), label),
 
-    hint: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(12, htmlFontSize), 1.43),
+    hint: createTypographyItem(fontFamily, fontWeightRegular, pxToRem(hintFont, htmlFontSize), hint),
   };
 };

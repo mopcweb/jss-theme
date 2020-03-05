@@ -1,6 +1,6 @@
 {
   "name": "jss-theme",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "JSS theming solution which could be used with any view library or framework",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

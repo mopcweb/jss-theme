@@ -4,235 +4,19 @@ import cloneDeep from 'lodash.clonedeep';
 import isEqual from 'lodash.isequal';
 
 import {
-  isFunction, replaceKey, fontMixin, paletteItemComposer, breakpointsComposer, createHash,
-} from './helpers';
-import {
-  JssTheme, JssCache, JssStyles, Replacer, DefaultTheme, ThemeTypographyItems,
+  JssTheme, JssCache, JssStyles, Replacer, DefaultTheme, DeepPartial, ThemeConstructor, Named,
 } from './typings';
+import { isFunction, replaceKey, createHash } from './helpers';
+import { createDefaultThemeConfig } from './defaultTheme';
 
 /**
  *  Theme constructor, which holds all logic for styling application, providing theme.
  */
-export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
+export class Theme<T extends JssTheme = DefaultTheme> implements ThemeConstructor<T> {
   /**
    *  Current theme
    */
-  private _theme: T = {
-    spacing: 8,
-    maxWidth: 1024,
-    direction: 'ltr',
-
-    palette: {
-      type: 'light',
-
-      common: {
-        black: '#000000',
-        white: '#ffffff',
-      },
-
-      primary: paletteItemComposer('#16a94a', '#ffffff'),
-      secondary: paletteItemComposer('#1373e2', '#ffffff'),
-      error: paletteItemComposer('#cc0000', '#ffffff'),
-      warning: paletteItemComposer('#16a94a', '#333333'),
-      info: paletteItemComposer('#16a94a', '#333333'),
-      success: paletteItemComposer('#16a94a', '#333333'),
-
-      grey: {
-        50: '#fafafa',
-        100: '#f5f5f5',
-        200: '#eeeeee',
-        300: '#e0e0e0',
-        400: '#bdbdbd',
-        500: '#9e9e9e',
-        600: '#757575',
-        700: '#616161',
-        800: '#424242',
-        900: '#212121',
-        A100: '#d5d5d5',
-        A200: '#aaaaaa',
-        A400: '#303030',
-        A700: '#616161',
-      },
-      text: {
-        primary: 'rgba(0, 0, 0, 0.87)',
-        secondary: 'rgba(0, 0, 0, 0.54)',
-        disabled: 'rgba(0, 0, 0, 0.38)',
-        hint: 'rgba(0, 0, 0, 0.38)',
-      },
-      background: {
-        paper: '#ffffff',
-        default: '#fafafa',
-      },
-      action: {
-        active: 'rgba(0, 0, 0, 0.54)',
-        hover: 'rgba(0, 0, 0, 0.04)',
-        hoverOpacity: 0.04,
-        selected: 'rgba(0, 0, 0, 0.08)',
-        selectedOpacity: 0.08,
-        disabled: 'rgba(0, 0, 0, 0.26)',
-        disabledBackground: 'rgba(0, 0, 0, 0.12)',
-        disabledOpacity: 0.38,
-        focus: 'rgba(0, 0, 0, 0.12)',
-        focusOpacity: 0.12,
-        activatedOpacity: 0.12,
-      },
-      divider: 'rgba(0, 0, 0, 0.12)',
-    },
-    typography: {
-      fontFamily: '"Open Sans", sans-serif',
-      // color: '#333',
-
-      htmlFontSize: 16,
-      fontSize: 14,
-      fontWeightLight: 300,
-      fontWeightRegular: 400,
-      fontWeightMedium: 500,
-      fontWeightBold: 600,
-
-      h1: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 600,
-        fontSize: '32px',
-        lineHeight: 1.167,
-
-        use: (): string => fontMixin(this.getTheme(), 'h1'),
-      },
-      h2: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 600,
-        fontSize: '24px',
-        lineHeight: 1.2,
-
-        use: (): string => fontMixin(this.getTheme(), 'h2'),
-      },
-      h3: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 600,
-        fontSize: '20px',
-        lineHeight: 1.167,
-
-        use: (): string => fontMixin(this.getTheme(), 'h3'),
-      },
-      h4: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 600,
-        fontSize: '20px',
-        lineHeight: 1.167,
-
-        use: (): string => fontMixin(this.getTheme(), 'h4'),
-      },
-      h5: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 600,
-        fontSize: '20px',
-        lineHeight: 1.167,
-
-        use: (): string => fontMixin(this.getTheme(), 'h5'),
-      },
-      h6: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 600,
-        fontSize: '20px',
-        lineHeight: 1.167,
-
-        use: (): string => fontMixin(this.getTheme(), 'h6'),
-      },
-
-      subtitle1: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 400,
-        fontSize: '24px',
-        lineHeight: 1.75,
-
-        use: (): string => fontMixin(this.getTheme(), 'subtitle1'),
-      },
-      subtitle2: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 400,
-        fontSize: '18px',
-        lineHeight: 1.57,
-
-        use: (): string => fontMixin(this.getTheme(), 'subtitle2'),
-      },
-
-      body1: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 400,
-        fontSize: '16px',
-        lineHeight: 1.5,
-
-        use: (): string => fontMixin(this.getTheme(), 'body1'),
-      },
-      body2: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 400,
-        fontSize: '12px',
-        lineHeight: 1.43,
-
-        use: (): string => fontMixin(this.getTheme(), 'body2'),
-      },
-
-      button: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 400,
-        fontSize: '12px',
-        lineHeight: 1.75,
-
-        use: (): string => fontMixin(this.getTheme(), 'button'),
-      },
-
-      label: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 400,
-        fontSize: '12px',
-        lineHeight: 1.43,
-
-        use: (): string => fontMixin(this.getTheme(), 'label'),
-      },
-
-      hint: {
-        fontFamily: '"Open Sans", sans-serif',
-        fontWeight: 400,
-        fontSize: '12px',
-        lineHeight: 1.43,
-
-        use: (): string => fontMixin(this.getTheme(), 'hint'),
-      },
-    },
-    shape: {
-      borderRadius: 4,
-    },
-    shadows: [
-      'none',
-      '0px 2px 8px #00000040',
-    ],
-    transitions: {
-      easing: {
-        easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
-        easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
-        easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
-        sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
-      },
-    },
-    mixins: {
-      gradient: (dir: string, ...breakpoints: string[]): string => `linear-gradient(${dir}, ${breakpoints})`,
-      spacing: (units: number): number => units * this.getTheme().spacing,
-      border: (units = 1, color = this.getTheme().palette.grey[400]): string => `${units}px solid ${color}`,
-      font: (prop: ThemeTypographyItems): string => fontMixin(this.getTheme(), prop),
-      transition: (
-        transition?: string, duration = 1, delay = 0, prop = 'all',
-      ): string => `${prop} ${duration}s ${transition} ${delay}s`,
-      transparent: (color: string, opacity = '80'): string => `${color}${opacity}`,
-    },
-    breakpoints: breakpointsComposer(),
-    zIndex: {
-      drawer: 1200,
-      modal: 1300,
-      snackbar: 1400,
-      tooltip: 1500,
-    },
-    /* eslint-disable-next-line */
-  } as any;
+  private _theme: T;
 
   /**
    *  Global options for creating Jss stylesheet
@@ -262,7 +46,8 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @param [replacer] - Default replacer for theme styles
    */
   public constructor(themeConfig?: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]) {
-    this.createTheme(themeConfig, options, replacer);
+    /* eslint-disable-next-line */
+    this.rewriteTheme(themeConfig || createDefaultThemeConfig(this as any) as any, options, replacer);
   }
 
   /**
@@ -326,25 +111,29 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
   }
 
   /**
-   *  Creates initital theme. Could be used only once upon each Theme instance.
-   *  It is a somewhat analogue for Theme.constructor()
+   *  Rewrites current theme. It is a somewhat analogue for Theme.constructor(), but for existing Theme instance
    *
    *  @param themeConfig - Theme options for creation
    *  @param [options] - Default options for creating new stylesheets
    *  @param [replacer] - Default replacer for theme styles
    */
-  public createTheme(themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]): T {
-    if (this._theme.updatedHash) {
-      throw new Error('Theme was already created. To update it consider using updateTheme');
+  public rewriteTheme(
+    themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
+  ): T {
+    if (!themeConfig) {
+      throw new Error('For updating theme it is necessary to provide themeConfig');
     }
 
-    if (themeConfig) {
-      // this._theme = cloneDeep(themeConfig);
-      this._theme = cloneDeep(merge(this._theme, themeConfig));
-      this._theme.updatedHash = this.createHash();
-    }
     if (options) this._options = cloneDeep(options);
     if (replacer) this._replacer = cloneDeep(replacer);
+
+    this._theme = cloneDeep(themeConfig);
+    this._theme.updatedHash = this.createHash();
+
+    this._cache.forEach((value, key) => {
+      value.sheet.detach();
+      this._cache.delete(key);
+    });
 
     return this.getTheme();
   }
@@ -354,11 +143,12 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  theme as provider for some values
    *
    *  @param themeConfig - Theme options overrides
-   *  @param styles - If this method is called in component it is necessary to provide styles
-   *  for compilation. This will return classes for component usage (aka useStyles method)
-   *  @param [options] - Options for creating new stylesheet
+   *  @param [options] - Default options for creating new stylesheets
+   *  @param [replacer] - Default replacer for theme styles
    */
-  public updateTheme(themeConfig: Partial<T>): T {
+  public updateTheme(
+    themeConfig: DeepPartial<T>, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
+  ): T {
     if (!themeConfig) {
       throw new Error('For updating theme it is necessary to provide themeConfig');
     }
@@ -368,6 +158,9 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
     if (isEqual(this._theme, updated)) {
       return this.getTheme();
     }
+
+    if (options) this._options = cloneDeep(options);
+    if (replacer) this._replacer = cloneDeep(replacer);
 
     this._theme = updated;
     this._theme.updatedHash = this.createHash();
@@ -388,7 +181,7 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @param styles - Styles to compile. Could be a function which uses theme
    *  @param [options] - Options for creating new stylesheet (if it is not cached)
    */
-  public useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): Classes {
+  public useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): Named<Classes> {
     if (!styles) {
       throw Error('Please provide styles object or function');
     }

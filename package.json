@@ -1,18 +1,21 @@
 {
   "name": "jss-theme",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "JSS theming solution which could be used with any view library or framework",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "lint": "eslint . --ext .ts",
     "clean": "rm -rf lib dist",
-    "readme": "./node_modules/.bin/ts-node updateReadme.ts",
-    "write": "./node_modules/.bin/ts-node updateBundle.ts",
-    "dryPublish": "npm publish --dry-run",
+    "scripts": "./node_modules/.bin/ts-node scripts.ts",
+    "dev": "nodemon --config nodemon.json",
+    "drp": "npm publish --dry-run",
     "tsc": "npm run lint && npm run clean && ./node_modules/.bin/tsc",
-    "build": "npm run lint && npm run clean && webpack && npm run write && npm run dryPublish",
-    "release": "npm run readme && npm run build && npm publish"
+    "build": "npm run lint && npm run clean && webpack",
+    "prepublishOnly": "npm run build && npm run scripts",
+    "preversion": "npm run lint",
+    "version": "npm run build && npm run scripts && git add .",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [
     "jss",
@@ -48,6 +51,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "jss": "^10.0.4",
     "jss-preset-default": "^10.0.4",
+    "nodemon": "^2.0.2",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.6.2",
     "tslib": "^1.11.0",

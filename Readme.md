@@ -1,16 +1,21 @@
 # JSS Theming Solution
 
-[![GitHub version](https://img.shields.io/badge/version-0.5.1-yellow.svg)](https://github.com/mopcweb/jss-theme/releases) [![npm version](https://img.shields.io/npm/v/jss-theme.svg)](https://www.npmjs.com/package/jss-theme) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mopcweb/jss-theme/blob/master/LICENSE)
+[![GitHub version](https://img.shields.io/badge/version-0.5.2-yellow.svg)](https://github.com/mopcweb/jss-theme/releases) [![npm version](https://img.shields.io/npm/v/jss-theme.svg)](https://www.npmjs.com/package/jss-theme) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mopcweb/jss-theme/blob/master/LICENSE)
 
 Inspired by React MUI theming solution in order to implement something like that for Angular projects.
 
 Still could be used w/ any other view library or framework.
 
+## IMPORTANT
+
+Since 0.5.2 is bundled in not minified version because in Angular it causes problem with decorators usage.
+In future minor releases this package will leave only generic code and all specific (for example Angular decorators and Class) will be removed into separate one
+
 ## Notes
 
 Include necessary typescript typings.
 
-Since 0.5.0 ships  w/ Default Theme. See #Default Theme
+Since 0.5.0 ships w/ Default Theme. See #Default Theme
 
 ## Init
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-len */
-import { StyleSheet, Styles } from 'jss';
+import { StyleSheet, Styles, StyleSheetFactoryOptions, Classes } from 'jss';
 
 export { Classes, Styles } from 'jss';
 
@@ -35,12 +35,19 @@ export interface Replacer {
 }
 
 /**
+ *  Interface for Getting Named key:value pairs object from provided type
+ *  Mock for feature of returning named classes from useStyles
+ */
+export type Named<T> = { [P in keyof T]: string };
+
+/**
  *  Jss theme object type.
  *
  *  This one could really be of any type: Array, Object, primitive ...
  *  Just when creating Theme instance be sure to provide correct typing for avoiding bugs in your application.
  */
-export type JssTheme = any;
+// export type JssTheme = any;
+export type JssTheme = Record<any, any> & { updatedHash?: number };
 
 /**
  *  Interface for Jss theme object
@@ -207,6 +214,7 @@ export type ThemeTypographyItems = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'su
 export interface ThemeTypographyDefaults {
   fontFamily?: string;
   htmlFontSize?: number;
+  lineHeight?: number;
   // fontSize?: number;
   fontWeightLight?: number | string;
   fontWeightRegular?: number | string;
@@ -284,12 +292,12 @@ export type ThemeShadows = string[];
  *  Interface for Theme shadow object config
  */
 export interface ThemeShadowObject {
-  inset?: boolean;
   x?: number;
   y?: number;
   blur?: number;
   spread?: number;
   color?: string;
+  inset?: boolean;
 }
 
 /**
@@ -319,19 +327,72 @@ export interface ThemeZIndex {
  */
 export interface ThemeMixins {
   /**
-   *  Creates linear gradient with provided direction and breakpoints
-   *
-   *  @param [dir] - Gradient direction
-   *  @param [...breakpoints] - Gradient breakpoints
+   *  Methods for creating CSS3 gradients (linear, radial, repeating-*) with provided options
    */
-  gradient: (dir: string, ...breakpoints: string[]) => string;
+  // gradient: (dir: string, ...breakpoints: string[]) => string;
+  gradient: {
+    /**
+     *  Creates CSS3 linear gradient(s). Accepts list of string | arrays
+     *
+     *  @example
+     *  ```ts
+     *    l('45deg, #fff 10px, #000 20px 30px');
+     *
+     *    or
+     *
+     *    l(
+     *      '45deg, #fff 10px, #000 20px 30px',
+     *      ['45deg', '#fff 10px 20px', '#000 20px 40%'],
+     *      ['#fff', 10, '#000', 20, 0.4, ['red', 10, 0.2]],
+     *    );
+     *  ```
+     *
+     *  It means that if provided array of breakpoints for each gradient, it is possible to
+     *  provide color-stops in 3 different ways:
+     *  1. '#fff 10px 10px'
+     *  2. '#fff', 10, 10
+     *  3. ['#fff', 10, 10]
+     *
+     *  @param breakpoints - Breakpoints (aka <color-stops>)
+     */
+    l: (...breakpoints: Array<string | number | [string, number, number?]>) => string;
+
+    /**
+     *  Creates CSS3 repeating linear gradient(s). Accepts list of string | arrays
+     *  See example for linear gradient method above
+     *
+     *  @param breakpoints - Breakpoints (aka <color-stops>)
+     */
+    rl: (...breakpoints: Array<string | number | [string, number, number?]>) => string;
+
+    /**
+     *  Creates CSS3 radial gradient(s). Accepts list of string | arrays
+     *  See example for linear gradient method above
+     *
+     *  @param breakpoints - Breakpoints (aka <color-stops>)
+     */
+    r: (...breakpoints: Array<string | number | [string, number, number?]>) => string;
+
+    /**
+     *  Creates CSS3 repeating radial gradient(s). Accepts list of string | arrays
+     *  See example for linear gradient method above
+     *
+     *  @param breakpoints - Breakpoints (aka <color-stops>)
+     */
+    rr: (...breakpoints: Array<string | number | [string, number, number?]>) => string;
+  };
 
   /**
-   *  Mixin for getting provided amount of current theme spacing units
+   *  Mixin for getting provided amount of current theme spacing units for each argument in pixels
    *
-   *  @param units - Amount of units (will be multiplied on current theme spacing)
+   *  @example (If theme.spacing = 8):
+   *  spacing(1, 2, 3) => '8px 16px 24px';
+   *  spacing(1, 0) => '8px 0px';
+   *  spacing(1, '100%') => '8px 100%';
+   *
+   *  @param units - Units (will be multiplied on current theme spacing)
    */
-  spacing: (...units: number[]) => string;
+  spacing: (...units: Array<number | string>) => string;
 
   /**
    *  Creates border with provided width (in standart units) and color
@@ -372,17 +433,17 @@ export interface ThemeMixins {
    *  Darkens a color.
    *
    *  @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
-   *  @param coef - multiplier in the range 0 - 1
+   *  @param [coef] - multiplier in the range 0 - 1
    */
-  darken: (customColor: string, coef: number) => string;
+  darken: (customColor: string, coef?: number) => string;
 
   /**
    *  Lightens a color.
    *
    *  @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
-   *  @param coef - multiplier in the range 0 - 1
+   *  @param [coef] - multiplier in the range 0 - 1
    */
-  lighten: (customColor: string, coef: number) => string;
+  lighten: (customColor: string, coef?: number) => string;
 
   /**
    *  Inverts input color and returns its opposite.
@@ -433,4 +494,19 @@ export interface DefaultTheme {
   zIndex: ThemeZIndex;
 
   updatedHash?: number;
+}
+
+/**
+ *  Interface for custom Theme constructor
+ */
+export interface ThemeConstructor<T extends JssTheme = JssTheme> {
+  getTheme(): T;
+  updateDefaultOptions(options: StyleSheetFactoryOptions): void;
+  updateDefaultReplacer(replacer: Replacer | Replacer[]): void;
+  isEqualTheme(theme: T): boolean;
+  hasStylesInCache(styles: JssStyles<T>): boolean;
+  rewriteTheme(themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]): T;
+  updateTheme(themeConfig: DeepPartial<T>, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]): T;
+  useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): Classes;
+  makeStyles(styles: JssStyles<T>): JssStyles<T>;
 }

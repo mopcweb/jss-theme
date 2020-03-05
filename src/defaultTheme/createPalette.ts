@@ -1,6 +1,8 @@
+import merge from 'lodash.merge';
+import cloneDeep from 'lodash.clonedeep';
+
 import {
-  ThemePaletteColor, ThemePaletteGrey, ThemePaletteBasicColors, ThemePalette, ThemePaletteType,
-  DeepPartial,
+  ThemePaletteColor, ThemePaletteGrey, ThemePaletteBasicColors, ThemePalette, DeepPartial,
 } from '../typings';
 import { darken, lighten, getContrastColor, rgbToHex } from './colorManipulator';
 
@@ -49,7 +51,7 @@ export const createColor = (color: string, contrastText?: string, bw = true): Th
 /**
  *  Default Material Design palettes - light and dark one
  */
-export const materialColors: { light: ThemePaletteBasicColors; dark: ThemePaletteBasicColors } = {
+const materialColors: { light: ThemePaletteBasicColors; dark: ThemePaletteBasicColors } = {
   light: {
     text: {
       primary: 'rgba(0, 0, 0, 0.87)',
@@ -108,11 +110,6 @@ export const materialColors: { light: ThemePaletteBasicColors; dark: ThemePalett
 };
 
 /**
- *  Gets material default palette depending on provided type
- */
-export const getMaterialColors = (type: ThemePaletteType): ThemePaletteBasicColors => materialColors[type];
-
-/**
  *  Create whole palette
  *
  *  @param palette - Partial palette options
@@ -137,6 +134,7 @@ export const createPalette = (
     info = createColor('#2196f3'),
     success = createColor('#4caf50'),
     grey = { 50: '#fafafa' },
+    ...others
   } = palette;
 
   if (!common.black) common.black = '#000000';
@@ -170,6 +168,9 @@ export const createPalette = (
     grey = createGreyPalette((grey as any)[greyKeys[0]]);
   }
 
+  const colors = cloneDeep(materialColors[type] || materialColors.light);
+  const defaultColors = merge(colors, { ...others });
+
   return {
     type,
     tonalOffset,
@@ -181,7 +182,7 @@ export const createPalette = (
     info,
     success,
     grey,
-    ...getMaterialColors(type),
+    ...defaultColors,
     /* eslint-disable-next-line */
   } as any;
 };

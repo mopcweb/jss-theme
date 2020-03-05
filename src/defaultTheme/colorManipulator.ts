@@ -184,14 +184,14 @@ export const getContrastRatio = (foreground: string, background: string): number
  *  @param color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
  *  @param value - value to set the alpha channel to in the range 0 -1
  *
- *  @returns A CSS color string
+ *  @returns A CSS color string. If provided HEX color and integer opacity will return it in rgba
  */
 export const fade = (customColor: string, opacity: string | number): string => {
   let color = customColor;
-  if (color.indexOf('#') === 0) {
-    if (typeof opacity !== 'string' || opacity.length !== 2) {
-      throw Error('For HEX colors opacity could be provided only in form of string');
-    }
+  if (color.indexOf('#') === 0 && typeof opacity === 'string') {
+    // if (typeof opacity !== 'string' || opacity.length !== 2) {
+    //   throw Error('For HEX colors opacity could be provided only in form of string');
+    // }
 
     color = color.slice(1, 7);
 

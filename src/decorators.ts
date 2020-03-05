@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
 import { Classes, StyleSheetFactoryOptions } from 'jss';
 
@@ -19,7 +18,7 @@ import { useStyles, isEqualTheme, getTheme } from './functions';
  */
 export function StyledComponent<T extends JssTheme = JssTheme>(
 // export function NgStyled<T extends JssTheme = JssTheme>(
-  styles: JssStyles<T>, options?: StyleSheetFactoryOptions, theme?: Theme,
+  styles: JssStyles<T>, options?: StyleSheetFactoryOptions, theme?: Theme<T>,
 ) {
   return (Class: Constructor): Constructor => (isFunction(styles)
     ? class extends Class {

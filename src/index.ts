@@ -11,4 +11,5 @@ export * from './defaultTheme/createPalette';
 export { createShadows, createMaterialShadows } from './defaultTheme/createShadows';
 export * from './defaultTheme/createTypography';
 export * from './defaultTheme/createZIndex';
-export { pxToRem } from './defaultTheme/mixins';
+export { pxToRem, createMixins, createGradient, parseBreakpoints } from './defaultTheme/mixins';
+export * from './defaultTheme';

@@ -1,11 +1,13 @@
 import { ThemeZIndex } from '../typings';
 
 /**
- *  Create Theme zIndex object
+ *  Creates Theme zIndex object
+ *
+ *  @param zIndex - Optional overrides
  */
-export const createZIndex = (basic = 120): ThemeZIndex => ({
-  drawer: basic,
-  modal: basic + 10,
-  snackbar: basic + 20,
-  tooltip: basic + 30,
+export const createZIndex = (zIndex: Partial<ThemeZIndex> = {}): ThemeZIndex => ({
+  drawer: zIndex.drawer || 120,
+  modal: zIndex.modal || (zIndex.drawer || 120) + 10,
+  snackbar: zIndex.snackbar || (zIndex.drawer || 120) + 20,
+  tooltip: zIndex.tooltip || (zIndex.drawer || 120) + 30,
 });

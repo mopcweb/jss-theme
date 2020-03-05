@@ -3,19 +3,20 @@ import merge from 'lodash.merge';
 import cloneDeep from 'lodash.clonedeep';
 import isEqual from 'lodash.isequal';
 
-import { JssTheme, JssCache, JssStyles, Replacer, DefaultTheme } from './typings';
+import {
+  JssTheme, JssCache, JssStyles, Replacer, DefaultTheme, DeepPartial, ThemeConstructor, Named,
+} from './typings';
 import { isFunction, replaceKey, createHash } from './helpers';
-import { defaultTheme } from './defaultTheme';
+import { createDefaultThemeConfig } from './defaultTheme';
 
 /**
  *  Theme constructor, which holds all logic for styling application, providing theme.
  */
-export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
+export class Theme<T extends JssTheme = DefaultTheme> implements ThemeConstructor<T> {
   /**
    *  Current theme
    */
-  /* eslint-disable-next-line */
-  private _theme: T = defaultTheme(this) as any;
+  private _theme: T;
 
   /**
    *  Global options for creating Jss stylesheet
@@ -45,7 +46,8 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @param [replacer] - Default replacer for theme styles
    */
   public constructor(themeConfig?: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]) {
-    this.createTheme(themeConfig, options, replacer);
+    /* eslint-disable-next-line */
+    this.rewriteTheme(themeConfig || createDefaultThemeConfig(this as any) as any, options, replacer);
   }
 
   /**
@@ -109,25 +111,29 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
   }
 
   /**
-   *  Creates initital theme. Could be used only once upon each Theme instance.
-   *  It is a somewhat analogue for Theme.constructor()
+   *  Rewrites current theme. It is a somewhat analogue for Theme.constructor(), but for existing Theme instance
    *
    *  @param themeConfig - Theme options for creation
    *  @param [options] - Default options for creating new stylesheets
    *  @param [replacer] - Default replacer for theme styles
    */
-  public createTheme(themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]): T {
-    if (this._theme.updatedHash) {
-      throw new Error('Theme was already created. To update it consider using updateTheme');
+  public rewriteTheme(
+    themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
+  ): T {
+    if (!themeConfig) {
+      throw new Error('For updating theme it is necessary to provide themeConfig');
     }
 
-    if (themeConfig) {
-      // this._theme = cloneDeep(themeConfig);
-      this._theme = cloneDeep(merge(this._theme, themeConfig));
-      this._theme.updatedHash = this.createHash();
-    }
     if (options) this._options = cloneDeep(options);
     if (replacer) this._replacer = cloneDeep(replacer);
+
+    this._theme = cloneDeep(themeConfig);
+    this._theme.updatedHash = this.createHash();
+
+    this._cache.forEach((value, key) => {
+      value.sheet.detach();
+      this._cache.delete(key);
+    });
 
     return this.getTheme();
   }
@@ -137,11 +143,12 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  theme as provider for some values
    *
    *  @param themeConfig - Theme options overrides
-   *  @param styles - If this method is called in component it is necessary to provide styles
-   *  for compilation. This will return classes for component usage (aka useStyles method)
-   *  @param [options] - Options for creating new stylesheet
+   *  @param [options] - Default options for creating new stylesheets
+   *  @param [replacer] - Default replacer for theme styles
    */
-  public updateTheme(themeConfig: Partial<T>): T {
+  public updateTheme(
+    themeConfig: DeepPartial<T>, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
+  ): T {
     if (!themeConfig) {
       throw new Error('For updating theme it is necessary to provide themeConfig');
     }
@@ -151,6 +158,9 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
     if (isEqual(this._theme, updated)) {
       return this.getTheme();
     }
+
+    if (options) this._options = cloneDeep(options);
+    if (replacer) this._replacer = cloneDeep(replacer);
 
     this._theme = updated;
     this._theme.updatedHash = this.createHash();
@@ -171,7 +181,7 @@ export class Theme<T extends JssTheme = Partial<DefaultTheme>> {
    *  @param styles - Styles to compile. Could be a function which uses theme
    *  @param [options] - Options for creating new stylesheet (if it is not cached)
    */
-  public useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): Classes {
+  public useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): Named<Classes> {
     if (!styles) {
       throw Error('Please provide styles object or function');
     }

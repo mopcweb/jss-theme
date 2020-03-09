@@ -2,9 +2,10 @@
 src
 
 ### Files
-webpack.config.js
-tsconfig.json
 .eslintrc
 .eslintignore
 .editorconfig
+nodemon.json
+webpack.config.js
+tsconfig.json
 scripts.ts

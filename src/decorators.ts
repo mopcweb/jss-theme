@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { Classes, StyleSheetFactoryOptions } from 'jss';
+import { StyleSheetFactoryOptions } from 'jss';
 
-import { JssStyles, JssTheme, Constructor } from './typings';
+import { JssStyles, JssTheme, Constructor, JssClasses } from './typings';
 import { isFunction } from './helpers';
 import { Theme } from './theme';
 import { useStyles, isEqualTheme, getTheme } from './functions';
@@ -22,7 +22,7 @@ export function StyledComponent<T extends JssTheme = JssTheme>(
 ) {
   return (Class: Constructor): Constructor => (isFunction(styles)
     ? class extends Class {
-      public classes: Classes = {};
+      public classes: JssClasses = {};
 
       private _cachedTheme: T;
 
@@ -43,7 +43,7 @@ export function StyledComponent<T extends JssTheme = JssTheme>(
       }
     }
     : class extends Class {
-      public classes: Classes = {};
+      public classes: JssClasses = {};
 
       public ngOnInit(): void {
         this.classes = useStyles(styles, options, theme);

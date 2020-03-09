@@ -11,7 +11,9 @@ import { fade, darken, lighten, getContrastColor } from './colorManipulator';
 export const fontMixin = <T extends JssTheme = JssTheme>(theme: T, prop: ThemeTypographyItems): string => {
   const { fontWeight, fontSize, lineHeight, fontFamily } = theme.typography[prop];
 
-  return `${fontWeight} ${fontSize}/${lineHeight} ${fontFamily}`;
+  const size = typeof fontSize === 'number' ? `${fontSize}px` : fontSize;
+
+  return `${fontWeight} ${size}/${lineHeight} ${fontFamily}`;
 };
 
 /**
@@ -20,7 +22,7 @@ export const fontMixin = <T extends JssTheme = JssTheme>(theme: T, prop: ThemeTy
  *  @param size - Size to convert into rem
  *  @param htmlFontSize - Html tag font size
  */
-export const pxToRem = (size: number, htmlFontSize: number): string => `${(size / htmlFontSize)}rem`;
+export const pxToRem = (size: number, htmlFontSize = 16): string => `${(size / htmlFontSize)}rem`;
 
 /**
  *  Parses array of items and creates CSS gradient accaptable string
@@ -88,29 +90,72 @@ export const createGradient = (
 /**
  *  Creates default mixins and binds them to provided Theme instance
  *
- *  @param Theme - Theme instance to which bind mixins
+ *  @param [Theme] - Theme instance to bind mixins to it. This one is optional since v0.5.4 as
+ *  on Theme instance creation there is an additional layer which binds mixins to created Theme instance
  */
-export const createMixins = (Theme: ThemeConstructor<DefaultTheme>): ThemeMixins => ({
-  fade,
-  getContrastColor,
-  darken: (color: string, coef = Theme.getTheme().palette.tonalOffset): string => darken(color, coef),
-  lighten: (color: string, coef = Theme.getTheme().palette.tonalOffset): string => lighten(color, coef),
-  gradient: {
-    l: (...bps): string => createGradient('linear-gradient', bps),
-    rl: (...bps): string => createGradient('repeating-linear-gradient', bps),
-    r: (...bps): string => createGradient('radial-gradient', bps),
-    rr: (...bps): string => createGradient('repeating-radial-gradient', bps),
-  },
-  spacing: (
-    ...units: Array<number | string>
-  ): string => units.map((item) => (typeof item === 'string' ? item : `${item * Theme.getTheme().spacing}px`)).join(' '),
-  border: (units = 1, color = Theme.getTheme().palette.grey[400]): string => `${units}px solid ${color}`,
-  font: (prop: ThemeTypographyItems): string => fontMixin(Theme.getTheme(), prop),
-  transition: (
-    transition?: string, duration = 1, delay = 0, prop = 'all',
-  ): string => `${prop} ${typeof duration === 'string'
-    ? duration
-    : `${duration}s`} ${transition} ${typeof delay === 'string' ? delay : `${delay}s`}`,
-  boxShadow: createShadows,
-  pxToRem: (size: number): string => pxToRem(size, Theme.getTheme().typography.htmlFontSize),
-});
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export function createMixins(Theme?: ThemeConstructor<DefaultTheme>): ThemeMixins {
+  return {
+    fade,
+    getContrastColor,
+
+    // Mixins w/ binding to Theme props
+    darken(color: string, coef?: number): string {
+      if (!coef && coef !== 0) {
+        const theme: any = Theme || this;
+        coef = theme.getTheme().palette.tonalOffset;
+      }
+
+      return darken(color, coef);
+    },
+    lighten(color: string, coef?: number): string {
+      if (!coef && coef !== 0) {
+        const theme: any = Theme || this;
+        coef = theme.getTheme().palette.tonalOffset;
+      }
+
+      return lighten(color, coef);
+    },
+    spacing(
+      ...units: Array<number | string>
+    ): string {
+      const theme: any = Theme || this;
+      return units.map((item) => (typeof item === 'string' ? item : `${item * theme.getTheme().spacing}px`)).join(' ');
+    },
+    border(units = 1, color?: string): string {
+      if (!color) {
+        const theme: any = Theme || this;
+        /* eslint-disable-next-line */
+        color = theme.getTheme().palette.grey[400];
+      }
+
+      return `${units}px solid ${color}`;
+    },
+    font(prop: ThemeTypographyItems): string {
+      const theme: any = Theme || this;
+      return fontMixin(theme.getTheme(), prop);
+    },
+    pxToRem(size: number, htmlFontSize?: number): string {
+      if (!htmlFontSize) {
+        const theme: any = Theme || this;
+        htmlFontSize = theme.getTheme().typography.htmlFontSize;
+      }
+
+      return pxToRem(size, htmlFontSize);
+    },
+
+    // Mixins without binding to Theme props
+    transition: (
+      transition?: string, duration = 1, delay = 0, prop = 'all',
+    ): string => `${prop} ${typeof duration === 'string'
+      ? duration
+      : `${duration}s`} ${transition} ${typeof delay === 'string' ? delay : `${delay}s`}`,
+    boxShadow: createShadows,
+    gradient: {
+      l: (...bps): string => createGradient('linear-gradient', bps),
+      rl: (...bps): string => createGradient('repeating-linear-gradient', bps),
+      r: (...bps): string => createGradient('radial-gradient', bps),
+      rr: (...bps): string => createGradient('repeating-radial-gradient', bps),
+    },
+  };
+}

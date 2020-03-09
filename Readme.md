@@ -1,6 +1,7 @@
+
 # JSS Theming Solution
 
-[![GitHub version](https://img.shields.io/badge/version-0.5.3-yellow.svg)](https://github.com/mopcweb/jss-theme/releases) [![npm version](https://img.shields.io/npm/v/jss-theme.svg)](https://www.npmjs.com/package/jss-theme) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mopcweb/jss-theme/blob/master/LICENSE)
+[![npm version](https://img.shields.io/npm/v/jss-theme.svg)](https://www.npmjs.com/package/jss-theme) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mopcweb/jss-theme/blob/master/LICENSE) [![Size](https://img.shields.io/bundlephobia/minzip/jss-theme.svg)](https://npmjs.org/package/jss-theme)
 
 Inspired by React MUI theming solution in order to implement something like that for Angular projects.
 
@@ -34,8 +35,10 @@ This method is just alias for next piece of code:
 import jss from 'jss';
 import preset from 'jss-preset-default';
 
+jss.setup(preset());
+// or
 const options = { ... };
-jss.setup(preset(options));
+jss.setup(options);
 ```
 
 ## Usage for custom Theme (multiple Themes)

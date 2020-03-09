@@ -3,7 +3,10 @@
 /* eslint-disable max-len */
 import { StyleSheet, Styles, StyleSheetFactoryOptions, Classes } from 'jss';
 
-export { Classes, Styles } from 'jss';
+/**
+ *  Classes object, which is returned after styles compilation and attaching to DOM
+ */
+export type JssClasses = Classes;
 
 /**
  *  Type for values which are of types of provided tuple
@@ -46,8 +49,8 @@ export type Named<T> = { [P in keyof T]: string };
  *  This one could really be of any type: Array, Object, primitive ...
  *  Just when creating Theme instance be sure to provide correct typing for avoiding bugs in your application.
  */
-// export type JssTheme = any;
-export type JssTheme = Record<any, any> & { updatedHash?: number };
+export type JssTheme = any & { updatedHash?: number };
+// export type JssTheme = Record<any, any> & { updatedHash?: number };
 
 /**
  *  Interface for Jss theme object
@@ -457,14 +460,14 @@ export interface ThemeMixins {
   getContrastColor: (color: string, bw?: boolean, black?: string, white?: string) => string;
 
   /**
-   *  Creates shadow(s) using provided list of config values
+   *  Creates shadow(s) using provided list of config values.
    *
    *  @param shadows - List of shadows config in form of objects or tuples
    */
   boxShadow: (...shadows: Array<ThemeShadowTuple | ThemeShadowObject>) => string;
 
   /**
-   *  Mixin for font property usage
+   *  Mixin for font property usage.
    *
    *  @param size - Size to convert into rem
    *  @param htmlFontSize - Html tag font size
@@ -473,8 +476,7 @@ export interface ThemeMixins {
 }
 
 /**
- *  Interface for app theme
- *
+ *  Interface for app theme.
  *  Most options are similar to React MUI with some additions / changes
  *
  *  @see https://material-ui.com/ru/customization/default-theme/
@@ -507,6 +509,6 @@ export interface ThemeConstructor<T extends JssTheme = JssTheme> {
   hasStylesInCache(styles: JssStyles<T>): boolean;
   rewriteTheme(themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]): T;
   updateTheme(themeConfig: DeepPartial<T>, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]): T;
-  useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): Classes;
+  useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): JssClasses;
   makeStyles(styles: JssStyles<T>): JssStyles<T>;
 }

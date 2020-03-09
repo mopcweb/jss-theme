@@ -9,26 +9,27 @@ import { createTypography } from './createTypography';
 import { createZIndex } from './createZIndex';
 
 /**
- *  Creates default theme with optional overrides
+ *  Creates default themeConfig with optional overrides
  *
- *  @param Theme - Theme instance to bind mixins to it
- *  @param theme - Overrides for default theme
+ *  @param themeConfig - Overrides for default themeConfig
+ *  @param [Theme] - Theme instance to bind mixins to it. This one is optional since v0.5.4 as
+ *  on Theme instance creation there is an additional layer which binds mixins to created Theme instance
  */
 export const createDefaultThemeConfig = (
-  Theme: ThemeConstructor<DefaultTheme>, theme: DeepPartial<DefaultTheme> = {},
+  themeConfig: DeepPartial<DefaultTheme> = {}, Theme?: ThemeConstructor<DefaultTheme>,
 ): DefaultTheme => ({
-  spacing: theme.spacing || 8,
-  maxWidth: theme.maxWidth || '100%',
-  direction: theme.direction || 'ltr',
+  spacing: themeConfig.spacing || 8,
+  maxWidth: themeConfig.maxWidth || '100%',
+  direction: themeConfig.direction || 'ltr',
 
-  palette: createPalette(theme.palette),
-  typography: createTypography(theme.typography),
-  mixins: merge(createMixins(Theme), theme.mixins),
-  breakpoints: createBreakpoints(theme.breakpoints && theme.breakpoints.values),
-  shadows: merge([...shadows], theme.shadows),
+  palette: createPalette(themeConfig.palette),
+  typography: createTypography(themeConfig.typography),
+  mixins: merge(createMixins(Theme), themeConfig.mixins),
+  breakpoints: createBreakpoints(themeConfig.breakpoints && themeConfig.breakpoints.values),
+  shadows: merge([...shadows], themeConfig.shadows),
   shape: merge({
     borderRadius: 4,
-  }, theme.shape),
+  }, themeConfig.shape),
   transitions: merge({
     easing: {
       easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
@@ -36,6 +37,6 @@ export const createDefaultThemeConfig = (
       easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
       sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
     },
-  }, theme.transitions),
-  zIndex: createZIndex(theme.zIndex),
+  }, themeConfig.transitions),
+  zIndex: createZIndex(themeConfig.zIndex),
 });

@@ -1,10 +1,10 @@
-import jss, { Classes, Styles, StyleSheetFactoryOptions } from 'jss';
+import jss, { Styles, StyleSheetFactoryOptions } from 'jss';
 import merge from 'lodash.merge';
 import cloneDeep from 'lodash.clonedeep';
 import isEqual from 'lodash.isequal';
 
 import {
-  JssTheme, JssCache, JssStyles, Replacer, DefaultTheme, DeepPartial, ThemeConstructor, Named,
+  JssTheme, JssCache, JssStyles, Replacer, DefaultTheme, DeepPartial, ThemeConstructor, Named, JssClasses,
 } from './typings';
 import { isFunction, replaceKey, createHash } from './helpers';
 import { createDefaultThemeConfig } from './defaultTheme';
@@ -47,7 +47,7 @@ export class Theme<T extends JssTheme = DefaultTheme> implements ThemeConstructo
    */
   public constructor(themeConfig?: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]) {
     /* eslint-disable-next-line */
-    this.rewriteTheme(themeConfig || createDefaultThemeConfig(this as any) as any, options, replacer);
+    this.rewriteTheme(themeConfig || createDefaultThemeConfig() as any, options, replacer);
   }
 
   /**
@@ -121,25 +121,16 @@ export class Theme<T extends JssTheme = DefaultTheme> implements ThemeConstructo
     themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
   ): T {
     if (!themeConfig) {
-      throw new Error('For updating theme it is necessary to provide themeConfig');
+      throw new Error('For rewriting theme it is necessary to provide themeConfig');
     }
 
-    if (options) this._options = cloneDeep(options);
-    if (replacer) this._replacer = cloneDeep(replacer);
+    const clone = this.cloneAndBind(themeConfig);
 
-    this._theme = cloneDeep(themeConfig);
-    this._theme.updatedHash = this.createHash();
-
-    this._cache.forEach((value, key) => {
-      value.sheet.detach();
-      this._cache.delete(key);
-    });
-
-    return this.getTheme();
+    return this.runThemeUpdate(clone, options, replacer);
   }
 
   /**
-   *  Updates current theme wtih new options. Detaches from DOM all cached styles, which uses
+   *  Updates current theme with new options. Detaches from DOM all cached styles, which uses
    *  theme as provider for some values
    *
    *  @param themeConfig - Theme options overrides
@@ -153,26 +144,15 @@ export class Theme<T extends JssTheme = DefaultTheme> implements ThemeConstructo
       throw new Error('For updating theme it is necessary to provide themeConfig');
     }
 
-    const updated = merge(cloneDeep(this._theme), cloneDeep(themeConfig));
+    const clone = this.cloneAndBind(themeConfig);
+
+    const updated = merge(cloneDeep(this._theme), clone);
 
     if (isEqual(this._theme, updated)) {
       return this.getTheme();
     }
 
-    if (options) this._options = cloneDeep(options);
-    if (replacer) this._replacer = cloneDeep(replacer);
-
-    this._theme = updated;
-    this._theme.updatedHash = this.createHash();
-
-    this._cache.forEach((value, key) => {
-      if (value.isStatic) return;
-
-      value.sheet.detach();
-      this._cache.delete(key);
-    });
-
-    return this.getTheme();
+    return this.runThemeUpdate(updated, options, replacer);
   }
 
   /**
@@ -181,7 +161,7 @@ export class Theme<T extends JssTheme = DefaultTheme> implements ThemeConstructo
    *  @param styles - Styles to compile. Could be a function which uses theme
    *  @param [options] - Options for creating new stylesheet (if it is not cached)
    */
-  public useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): Named<Classes> {
+  public useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): Named<JssClasses> {
     if (!styles) {
       throw Error('Please provide styles object or function');
     }
@@ -208,6 +188,69 @@ export class Theme<T extends JssTheme = DefaultTheme> implements ThemeConstructo
    */
   public makeStyles(styles: JssStyles<T>): JssStyles<T> {
     return styles;
+  }
+
+  /**
+   *  Clones provided themeConfig, bind mixins and returns updated themeConfig
+   *
+   *  @param themeConfig - Theme options for creation
+   */
+  private cloneAndBind<C extends DeepPartial<T>>(themeConfig: C): C {
+    const clone = cloneDeep(themeConfig);
+
+    // It is necessary to bind mixins to current theme instance on its creation.
+    // This one is necessary in case if when creating mixins theme instance wasn't provided manually.
+    /* eslint-disable-next-line */
+    this.bindThemeMixins(clone.mixins as any);
+
+    return clone;
+  }
+
+  /**
+   *  Containes logic for updating current theme property, options, replcaer and cleaning cache
+   *
+   *  @param themeConfig - Theme options overrides
+   *  @param [options] - Default options for creating new stylesheets
+   *  @param [replacer] - Default replacer for theme styles
+   */
+  private runThemeUpdate(
+    themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
+  ): T {
+    if (options) this._options = cloneDeep(options);
+    if (replacer) this._replacer = cloneDeep(replacer);
+
+    this._theme = themeConfig;
+    this._theme.updatedHash = this.createHash();
+
+    this._cache.forEach((value, key) => {
+      if (value.isStatic) return;
+
+      value.sheet.detach();
+      this._cache.delete(key);
+    });
+
+    return this.getTheme();
+  }
+
+  /**
+   *  Binds theme mixins to current theme instance
+   *
+   *  @param mixins - Mixins object to run bunding against
+   */
+  private bindThemeMixins<T extends Record<string, Function> = Record<string, Function>>(mixins: T): void {
+    if (mixins) {
+      Object.keys(mixins).forEach((key) => {
+        if (!(mixins[key] instanceof Function)) {
+          /* eslint-disable-next-line */
+          if (typeof mixins[key] === 'object') this.bindThemeMixins((mixins[key] as any));
+
+          return;
+        }
+
+        /* eslint-disable-next-line */
+        (mixins[key] as any) = mixins[key].bind(this);
+      });
+    }
   }
 
   /**

@@ -1,10 +1,9 @@
-import jss, { Classes, JssOptions, StyleSheetFactoryOptions, Jss } from 'jss';
+import jss, { JssOptions, StyleSheetFactoryOptions, Jss } from 'jss';
 import preset from 'jss-preset-default';
 
-import { JssTheme, JssStyles, Replacer, DefaultTheme, DeepPartial, Named } from './typings';
+import { JssTheme, JssStyles, Replacer, DefaultTheme, DeepPartial, Named, JssClasses } from './typings';
 import { Theme } from './theme';
 
-// let DefaultThemeInstance = new Theme();
 let DefaultThemeInstance: Theme<JssTheme>;
 
 /**
@@ -96,7 +95,7 @@ export const updateTheme = <T extends JssTheme = DeepPartial<DefaultTheme>>(
  */
 export const useStyles = <T extends JssTheme = DefaultTheme>(
   styles: JssStyles, options?: StyleSheetFactoryOptions, theme: Theme<T> = DefaultThemeInstance as any,
-): Named<Classes> => {
+): Named<JssClasses> => {
   if (!DefaultThemeInstance) {
     throw Error('To make actions over defaultTheme first call createDefaultTheme() function, please');
   }
@@ -190,5 +189,3 @@ export const updateDefaultReplacer = (
 
   return theme.updateDefaultReplacer(replacer);
 };
-
-/* eslint-enable @typescript-eslint/no-explicit-any */

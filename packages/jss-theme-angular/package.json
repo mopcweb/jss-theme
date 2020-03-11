@@ -1,26 +1,20 @@
 {
-  "name": "root",
-  "version": "0.5.3",
-  "description": "JSS theming solution which could be used with any view library or framework",
+  "name": "jss-theme-angular",
+  "version": "0.0.0",
+  "description": "JSS theming solution utils for Angular",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "clean": "rm -rf lib dist",
+    "clean": "rm -rf lib",
     "scripts": "./node_modules/.bin/ts-node scripts.ts",
-    "dev:core": "cd packages/jss-theme && nodemon --config nodemon.json",
-    "dev:angular": "cd packages/jss-theme-angular && nodemon --config nodemon.json",
-    "dev:default": "cd packages/jss-theme-default && nodemon --config nodemon.json",
-    "dev": "concurrently --kill-others-on-fail \"npm run dev:core\" \"npm run dev:angular\" \"npm run dev:default\"",
+    "dev": "nodemon --config nodemon.json",
     "drp": "npm publish --dry-run",
     "tsc": "npm run lint && npm run clean && ./node_modules/.bin/tsc",
-    "build:core": "cd packages/jss-theme && npm run build",
-    "build:angular": "cd packages/jss-theme-angular && npm run build",
-    "build:default": "cd packages/jss-theme-default && npm run build",
-    "build": "npm run build:core && npm run build:angular && npm run build:default",
-    "prepublishOnly": "npm run build && npm run scripts",
+    "build": "npm run lint && npm run clean && webpack && npm run scripts",
+    "prepublishOnly": "npm run build",
     "preversion": "npm run lint",
-    "version": "npm run build && npm run scripts && git add .",
+    "version": "npm run build && git add .",
     "postversion": "git push && git push --tags"
   },
   "keywords": [
@@ -32,14 +26,16 @@
   ],
   "author": "Danyil Moroz",
   "license": "MIT",
-  "workspaces": [
-    "packages/*"
-  ],
+  "dependencies": {},
+  "peerDependencies": {
+    "jss": "^10.0.4",
+    "jss-preset-default": "^10.0.4",
+    "jss-theme": "^0.5.3"
+  },
   "devDependencies": {
     "@types/node": "^13.7.4",
     "@typescript-eslint/eslint-plugin": "^2.20.0",
     "@typescript-eslint/parser": "^2.20.0",
-    "concurrently": "^5.1.0",
     "dts-bundle-generator": "^3.3.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
@@ -50,6 +46,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "jss": "^10.0.4",
     "jss-preset-default": "^10.0.4",
+    "jss-theme": "^0.5.3",
     "nodemon": "^2.0.2",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.6.2",
@@ -58,5 +55,14 @@
     "typescript-eslint": "0.0.1-alpha.0",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11"
-  }
+  },
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mopcweb/jss-theme"
+  },
+  "bugs": {
+    "url": "https://github.com/mopcweb/jss-theme/issues/new"
+  },
+  "homepage": "https://github.com/mopcweb/jss-theme"
 }

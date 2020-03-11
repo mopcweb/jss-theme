@@ -1,9 +1,7 @@
 import { StyleSheetFactoryOptions } from 'jss';
 
-import { JssClasses, JssStyles, JssTheme } from './typings';
-import { Theme } from './theme';
+import { Theme, JssStyles, JssTheme, getTheme, useStyles, isEqualTheme, Classes } from 'jss-theme';
 import { isFunction } from './helpers';
-import { getTheme, useStyles, isEqualTheme } from './functions';
 
 /**
  *  Class for usage in Angular 8+ projects with --aot compiler enabled. DON'T FORGET to call super(styles)
@@ -18,7 +16,7 @@ import { getTheme, useStyles, isEqualTheme } from './functions';
  *  @param [theme] - Constructed custom theme
  */
 export class NgStyledComponent<T extends JssTheme = JssTheme> {
-  public classes: JssClasses = {};
+  public classes: Classes = {};
 
   private _styles!: JssStyles;
   private _theme?: Theme<T>;

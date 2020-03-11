@@ -1,7 +1,4 @@
-import {
-  JssTheme, ThemeTypographyItems, ThemeMixins, ThemeConstructor, DefaultTheme, ThemeMixinsFactory,
-} from '../typings';
-import { isFunction } from '../helpers';
+import { JssTheme, JssThemeTypographyItems, JssThemeMixins, JssThemeConstructor, JssThemeDefault } from './typings';
 import { createShadows } from './createShadows';
 import { fade, darken, lighten, getContrastColor } from './colorManipulator';
 
@@ -11,7 +8,7 @@ import { fade, darken, lighten, getContrastColor } from './colorManipulator';
  *  @param theme - Current theme
  *  @param prop - Property name to use mixin of
  */
-export const fontMixin = <T extends JssTheme = JssTheme>(theme: T, prop: ThemeTypographyItems): string => {
+export const fontMixin = <T extends JssTheme = JssTheme>(theme: T, prop: JssThemeTypographyItems): string => {
   const { fontWeight, fontSize, lineHeight, fontFamily } = theme.typography[prop];
 
   const size = typeof fontSize === 'number' ? `${fontSize}px` : fontSize;
@@ -97,7 +94,7 @@ export const createGradient = (
  *  on Theme instance creation there is an additional layer which binds mixins to created Theme instance
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export function createMixins(Theme?: ThemeConstructor<DefaultTheme>): ThemeMixins {
+export function createMixins(Theme?: JssThemeConstructor<JssThemeDefault>): JssThemeMixins {
   return {
     fade,
     getContrastColor,
@@ -134,7 +131,7 @@ export function createMixins(Theme?: ThemeConstructor<DefaultTheme>): ThemeMixin
 
       return `${units}px solid ${color}`;
     },
-    font(prop: ThemeTypographyItems): string {
+    font(prop: JssThemeTypographyItems): string {
       const theme: any = Theme || this;
       return fontMixin(theme.getTheme(), prop);
     },
@@ -167,6 +164,6 @@ export function createMixins(Theme?: ThemeConstructor<DefaultTheme>): ThemeMixin
  *  This one is factory which returns fucntion for creating mixins.
  *  TODO: this one is not ready for now thus is not exported.
  */
-// function createMixinsFactory(): ((Theme?: ThemeConstructor) => ThemeMixins) {
+// function createMixinsFactory(): ((Theme?: JssThemeConstructor) => JssThemeMixins) {
 //   return createMixins;
 // }

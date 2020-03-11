@@ -1,0 +1,11 @@
+### Directories
+src
+
+### Files
+.eslintrc
+.eslintignore
+.editorconfig
+nodemon.json
+tsconfig.json
+webpack.config.js
+scripts.ts

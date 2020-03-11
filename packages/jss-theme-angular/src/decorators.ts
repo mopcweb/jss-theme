@@ -1,10 +1,10 @@
 /* eslint-disable max-classes-per-file */
 import { StyleSheetFactoryOptions } from 'jss';
 
-import { JssStyles, JssTheme, Constructor, JssClasses } from './typings';
+import {
+  Theme, JssStyles, JssTheme, Constructor, Classes, useStyles, isEqualTheme, getTheme,
+} from 'jss-theme';
 import { isFunction, throwDecoratorError } from './helpers';
-import { Theme } from './theme';
-import { useStyles, isEqualTheme, getTheme } from './functions';
 
 /**
  *  Decorator for injecting styles into component.
@@ -31,7 +31,7 @@ export function StyledComponent<T extends JssTheme = JssTheme>(
 
     return (isFunction(styles)
       ? class extends Class {
-        public classes: JssClasses = {};
+        public classes: Classes = {};
 
         private _cachedTheme: T;
 
@@ -52,7 +52,7 @@ export function StyledComponent<T extends JssTheme = JssTheme>(
         }
       }
       : class extends Class {
-        public classes: JssClasses = {};
+        public classes: Classes = {};
 
         public ngOnInit(): void {
           this.classes = useStyles(styles, options, theme);

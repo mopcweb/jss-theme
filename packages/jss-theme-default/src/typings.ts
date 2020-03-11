@@ -1,13 +1,5 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-len */
-import { StyleSheet, Styles, StyleSheetFactoryOptions, Classes } from 'jss';
-
-/**
- *  Classes object, which is returned after styles compilation and attaching to DOM
- */
-export type JssClasses = Classes;
-
 /**
  *  Type for values which are of types of provided tuple
  */
@@ -25,25 +17,6 @@ export type DeepPartial<T> = {
 };
 
 /**
- *  Class constructior type
- */
-export type Constructor<T = any> = new (...args: any[]) => T;
-
-/**
- *  Inteface for replacer helper
- */
-export interface Replacer {
-  pattern: RegExp | string;
-  value: string;
-}
-
-/**
- *  Interface for Getting Named key:value pairs object from provided type
- *  Mock for feature of returning named classes from useStyles
- */
-export type Named<T> = { [P in keyof T]: string };
-
-/**
  *  Jss theme object type.
  *
  *  This one could really be of any type: Array, Object, primitive ...
@@ -53,47 +26,27 @@ export type JssTheme = any & { updatedHash?: number };
 // export type JssTheme = Record<any, any> & { updatedHash?: number };
 
 /**
- *  Interface for Jss theme object
- */
-export type JssStyles<T extends JssTheme = JssTheme> = ((theme: T) => Styles) | Styles;
-
-/**
- *  Interface for Cached styles
- */
-export interface JssCache {
-  /**
-   *  Whether styles are static. If static - they won't be rerendered on theme update
-   */
-  isStatic: boolean;
-
-  /**
-   *  Compiled and attached to DOM styles
-   */
-  sheet: StyleSheet;
-}
-
-/**
  *  Interface for theme color types
  */
-export type ThemeColorTypes = 'rgb' | 'rgba' | 'hsl' | 'hsla';
+export type JssThemeColorTypes = 'rgb' | 'rgba' | 'hsl' | 'hsla';
 
 /**
  *  Interface for theme color manipulator color object
  */
-export interface ThemeColorObject {
-  type: ThemeColorTypes;
+export interface JssThemeColorObject {
+  type: JssThemeColorTypes;
   values: number[];
 }
 
 /**
  *  Interface for default palette types (themes)
  */
-export type ThemePaletteType = 'light' | 'dark';
+export type JssThemePaletteType = 'light' | 'dark';
 
 /**
  *  Inteface for Theme palette color
  */
-export interface ThemePaletteColor {
+export interface JssThemePaletteColor {
   light: string;
   main: string;
   dark: string;
@@ -103,7 +56,7 @@ export interface ThemePaletteColor {
 /**
  *  Inteface for Theme palette common colors
  */
-export interface ThemePaletteCommon {
+export interface JssThemePaletteCommon {
   black: string;
   white: string;
 }
@@ -111,7 +64,7 @@ export interface ThemePaletteCommon {
 /**
  *  Inteface for Theme palette shadows of grey colors
  */
-export interface ThemePaletteGrey {
+export interface JssThemePaletteGrey {
   50: string;
   100: string;
   200: string;
@@ -131,7 +84,7 @@ export interface ThemePaletteGrey {
 /**
  *  Inteface for Theme palette text colors
  */
-export interface ThemePaletteText {
+export interface JssThemePaletteText {
   primary: string;
   secondary: string;
   disabled: string;
@@ -141,7 +94,7 @@ export interface ThemePaletteText {
 /**
  *  Inteface for Theme palette background colors
  */
-export interface ThemePaletteBackground {
+export interface JssThemePaletteBackground {
   paper: string;
   default: string;
 }
@@ -149,7 +102,7 @@ export interface ThemePaletteBackground {
 /**
  *  Inteface for Theme palette action colors (colors for different actions)
  */
-export interface ThemePaletteAction {
+export interface JssThemePaletteAction {
   active: string;
   hover: string;
   hoverOpacity: number;
@@ -166,37 +119,37 @@ export interface ThemePaletteAction {
 /**
  *  Inteface for Theme palette basic colors
  */
-export interface ThemePaletteBasicColors {
-  text: ThemePaletteText;
-  background: ThemePaletteBackground;
-  action: ThemePaletteAction;
+export interface JssThemePaletteBasicColors {
+  text: JssThemePaletteText;
+  background: JssThemePaletteBackground;
+  action: JssThemePaletteAction;
   divider: string;
 }
 
 /**
  *  Inteface for Theme Palette
  */
-export interface ThemePalette {
-  type: ThemePaletteType;
+export interface JssThemePalette {
+  type: JssThemePaletteType;
   tonalOffset: number;
-  common: ThemePaletteCommon;
-  primary: ThemePaletteColor;
-  secondary: ThemePaletteColor;
-  error: ThemePaletteColor;
-  warning: ThemePaletteColor;
-  info: ThemePaletteColor;
-  success: ThemePaletteColor;
-  grey: ThemePaletteGrey;
-  text: ThemePaletteText;
-  background: ThemePaletteBackground;
-  action: ThemePaletteAction;
+  common: JssThemePaletteCommon;
+  primary: JssThemePaletteColor;
+  secondary: JssThemePaletteColor;
+  error: JssThemePaletteColor;
+  warning: JssThemePaletteColor;
+  info: JssThemePaletteColor;
+  success: JssThemePaletteColor;
+  grey: JssThemePaletteGrey;
+  text: JssThemePaletteText;
+  background: JssThemePaletteBackground;
+  action: JssThemePaletteAction;
   divider: string;
 }
 
 /**
  *  Interface for Theme Typography Item
  */
-export interface ThemeTypographyItem {
+export interface JssThemeTypographyItem {
   fontFamily: string;
   fontWeight: number | string;
   fontSize: number | string;
@@ -207,14 +160,26 @@ export interface ThemeTypographyItem {
 }
 
 /**
- *  Interface for Theme typography available items
+ *  Interface for Theme typography available items (variants)
  */
-export type ThemeTypographyItems = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'subtitle1' | 'subtitle2' | 'body1' | 'body2' | 'button' | 'label' | 'hint';
+export type JssThemeTypographyItems = 'h1'
+| 'h2'
+| 'h3'
+| 'h4'
+| 'h5'
+| 'h6'
+| 'subtitle1'
+| 'subtitle2'
+| 'body1'
+| 'body2'
+| 'button'
+| 'label'
+| 'hint';
 
 /**
  *  Interface for Theme typography creation config
  */
-export interface ThemeTypographyDefaults {
+export interface JssThemeTypographyDefaults {
   fontFamily?: string;
   htmlFontSize?: number;
   lineHeight?: number;
@@ -228,31 +193,31 @@ export interface ThemeTypographyDefaults {
 /**
  *  Interface for Theme typography
  */
-export interface ThemeTypography extends Required<ThemeTypographyDefaults> {
-  h1: ThemeTypographyItem;
-  h2: ThemeTypographyItem;
-  h3: ThemeTypographyItem;
-  h4: ThemeTypographyItem;
-  h5: ThemeTypographyItem;
-  h6: ThemeTypographyItem;
+export interface JssThemeTypography extends Required<JssThemeTypographyDefaults> {
+  h1: JssThemeTypographyItem;
+  h2: JssThemeTypographyItem;
+  h3: JssThemeTypographyItem;
+  h4: JssThemeTypographyItem;
+  h5: JssThemeTypographyItem;
+  h6: JssThemeTypographyItem;
 
-  subtitle1: ThemeTypographyItem;
-  subtitle2: ThemeTypographyItem;
+  subtitle1: JssThemeTypographyItem;
+  subtitle2: JssThemeTypographyItem;
 
-  body1: ThemeTypographyItem;
-  body2: ThemeTypographyItem;
+  body1: JssThemeTypographyItem;
+  body2: JssThemeTypographyItem;
 
-  button: ThemeTypographyItem & { textTransform: string };
+  button: JssThemeTypographyItem & { textTransform: string };
 
-  label: ThemeTypographyItem;
+  label: JssThemeTypographyItem;
 
-  hint: ThemeTypographyItem;
+  hint: JssThemeTypographyItem;
 }
 
 /**
  *  Interface for Theme transitions
  */
-export interface ThemeTransitions {
+export interface JssThemeTransitions {
   easing: {
     easeInOut: string;
     easeOut: string;
@@ -264,37 +229,37 @@ export interface ThemeTransitions {
 /**
  *  Interface for Theme breakpoints keys
  */
-export type ThemeBreakpointsKeys = ['xs', 'sm', 'md', 'lg', 'xl'];
+export type JssThemeBreakpointsKeys = ['xs', 'sm', 'md', 'lg', 'xl'];
 
 /**
  *  Interface for Theme breakpoints values
  */
-export type ThemeBreakpointsValues = Record<OneOf<ThemeBreakpointsKeys>, number>;
+export type JssThemeBreakpointsValues = Record<OneOf<JssThemeBreakpointsKeys>, number>;
 
 /**
  *  Interface for Theme breakpoints
  */
-export interface ThemeBreakpoints {
-  keys: ThemeBreakpointsKeys;
-  values: ThemeBreakpointsValues;
+export interface JssThemeBreakpoints {
+  keys: JssThemeBreakpointsKeys;
+  values: JssThemeBreakpointsValues;
 
-  up: (value: OneOf<ThemeBreakpointsKeys> | number) => string;
-  down: (value: OneOf<ThemeBreakpointsKeys> | number) => string;
-  between: (start: OneOf<ThemeBreakpointsKeys> | number, end: OneOf<ThemeBreakpointsKeys> | number) => string;
-  only: (value: OneOf<ThemeBreakpointsKeys> | number) => string;
-  width: (value: OneOf<ThemeBreakpointsKeys>) => number;
+  up: (value: OneOf<JssThemeBreakpointsKeys> | number) => string;
+  down: (value: OneOf<JssThemeBreakpointsKeys> | number) => string;
+  between: (start: OneOf<JssThemeBreakpointsKeys> | number, end: OneOf<JssThemeBreakpointsKeys> | number) => string;
+  only: (value: OneOf<JssThemeBreakpointsKeys> | number) => string;
+  width: (value: OneOf<JssThemeBreakpointsKeys>) => number;
 }
 
 /**
  *  Interface for Theme shadows
  */
-export type ThemeShadows = string[];
+export type JssThemeShadows = string[];
 
 
 /**
  *  Interface for Theme shadow object config
  */
-export interface ThemeShadowObject {
+export interface JssThemeShadowObject {
   x?: number;
   y?: number;
   blur?: number;
@@ -306,19 +271,19 @@ export interface ThemeShadowObject {
 /**
  *  Interface for Theme shadow array (tuple) config
  */
-export type ThemeShadowTuple = [number?, number?, number?, number?, string?, boolean?];
+export type JssThemeShadowTuple = [number?, number?, number?, number?, string?, boolean?];
 
 /**
  *  Interface for Theme shape options
  */
-export interface ThemeShape {
+export interface JssThemeShape {
   borderRadius: number | string;
 }
 
 /**
  *  Interface for Theme zIndex options
  */
-export interface ThemeZIndex {
+export interface JssThemeZIndex {
   modal: number;
   drawer: number;
   snackbar: number;
@@ -328,7 +293,7 @@ export interface ThemeZIndex {
 /**
  *  Interface for Theme default mixins
  */
-export interface ThemeMixins {
+export interface JssThemeMixins {
   /**
    *  Methods for creating CSS3 gradients (linear, radial, repeating-*) with provided options
    */
@@ -410,7 +375,7 @@ export interface ThemeMixins {
    *
    *  @param prop - Property name from current theme typography variants
    */
-  font: (prop: ThemeTypographyItems) => string;
+  font: (prop: JssThemeTypographyItems) => string;
 
   /**
    *  Creates transition
@@ -464,7 +429,7 @@ export interface ThemeMixins {
    *
    *  @param shadows - List of shadows config in form of objects or tuples
    */
-  boxShadow: (...shadows: Array<ThemeShadowTuple | ThemeShadowObject>) => string;
+  boxShadow: (...shadows: Array<JssThemeShadowTuple | JssThemeShadowObject>) => string;
 
   /**
    *  Mixin for font property usage.
@@ -476,9 +441,9 @@ export interface ThemeMixins {
 }
 
 /**
- *  Interface for Theme mixins factory: ThemeMixins object or fucntion which produces them
+ *  Interface for Theme mixins factory: JssThemeMixins object or fucntion which produces them
  */
-export type ThemeMixinsFactory = ((Theme: ThemeConstructor) => ThemeMixins) | ThemeMixins;
+export type JssThemeMixinsFactory = ((Theme: JssThemeConstructor) => JssThemeMixins) | JssThemeMixins;
 
 /**
  *  Interface for app theme.
@@ -486,19 +451,19 @@ export type ThemeMixinsFactory = ((Theme: ThemeConstructor) => ThemeMixins) | Th
  *
  *  @see https://material-ui.com/ru/customization/default-theme/
  */
-export interface DefaultTheme {
+export interface JssThemeDefault {
   spacing: number;
   maxWidth: number | string;
   direction: string;
 
-  palette: ThemePalette;
-  typography: ThemeTypography;
-  shape: ThemeShape;
-  shadows: ThemeShadows;
-  breakpoints: ThemeBreakpoints;
-  mixins: ThemeMixins;
-  transitions: ThemeTransitions;
-  zIndex: ThemeZIndex;
+  palette: JssThemePalette;
+  typography: JssThemeTypography;
+  shape: JssThemeShape;
+  shadows: JssThemeShadows;
+  breakpoints: JssThemeBreakpoints;
+  mixins: JssThemeMixins;
+  transitions: JssThemeTransitions;
+  zIndex: JssThemeZIndex;
 
   updatedHash?: number;
 }
@@ -506,14 +471,6 @@ export interface DefaultTheme {
 /**
  *  Interface for custom Theme constructor
  */
-export interface ThemeConstructor<T extends JssTheme = JssTheme> {
+export interface JssThemeConstructor<T extends JssTheme = JssTheme> {
   getTheme(): T;
-  updateDefaultOptions(options: StyleSheetFactoryOptions): void;
-  updateDefaultReplacer(replacer: Replacer | Replacer[]): void;
-  isEqualTheme(theme: T): boolean;
-  hasStylesInCache(styles: JssStyles<T>): boolean;
-  rewriteTheme(themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]): T;
-  updateTheme(themeConfig: DeepPartial<T>, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[]): T;
-  useStyles(styles: JssStyles<T>, options?: StyleSheetFactoryOptions): JssClasses;
-  makeStyles(styles: JssStyles<T>): JssStyles<T>;
 }

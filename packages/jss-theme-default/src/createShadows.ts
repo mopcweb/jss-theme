@@ -1,4 +1,4 @@
-import { ThemeShadowTuple, ThemeShadowObject } from '../typings';
+import { JssThemeShadowTuple, JssThemeShadowObject } from './typings';
 
 /**
  *  Creates shadow(s) using provided list of config values
@@ -6,9 +6,9 @@ import { ThemeShadowTuple, ThemeShadowObject } from '../typings';
  *  @param shadows - List of shadows config in form of objects or tuples
  */
 export const createShadows = (
-  ...shadows: Array<ThemeShadowTuple | ThemeShadowObject>
+  ...shadows: Array<JssThemeShadowTuple | JssThemeShadowObject>
 ): string => shadows.map((item) => {
-  const mapped: ThemeShadowTuple = Array.isArray(item)
+  const mapped: JssThemeShadowTuple = Array.isArray(item)
     ? item
     : [item.x, item.y, item.blur, item.spread, item.color, item.inset];
 

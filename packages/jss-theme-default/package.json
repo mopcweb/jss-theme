@@ -1,0 +1,61 @@
+{
+  "name": "jss-theme-default",
+  "version": "0.1.0",
+  "description": "JSS theming solution default Theme w/ types, structure and utils for theme creation",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "lint": "eslint . --ext .ts -c ../../.eslintrc --ignore-path ../../.eslintignore",
+    "clean": "rm -rf lib",
+    "scripts": "./node_modules/.bin/ts-node ../../scripts/bundle.ts",
+    "build": "npm run lint && npm run clean && webpack --config  ../../webpack.config.js && npm run scripts",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Danyil Moroz",
+  "license": "MIT",
+  "keywords": [
+    "jss",
+    "theming",
+    "jss-theme",
+    "theme",
+    "default-theme"
+  ],
+  "dependencies": {
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.merge": "^4.6.2"
+  },
+  "devDependencies": {
+    "@types/lodash.clonedeep": "^4.5.6",
+    "@types/lodash.merge": "^4.6.6",
+    "@types/node": "^13.7.4",
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
+    "dts-bundle-generator": "^3.3.1",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-json": "^2.1.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "jss": "^10.0.4",
+    "jss-preset-default": "^10.0.4",
+    "nodemon": "^2.0.2",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.6.2",
+    "tslib": "^1.11.0",
+    "typescript": "^3.8.2",
+    "typescript-eslint": "0.0.1-alpha.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
+  },
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mopcweb/jss-theme"
+  },
+  "bugs": {
+    "url": "https://github.com/mopcweb/jss-theme/issues/new"
+  },
+  "homepage": "https://github.com/mopcweb/jss-theme/packages/jss-theme-default"
+}

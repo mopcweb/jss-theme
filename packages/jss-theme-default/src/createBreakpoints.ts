@@ -1,19 +1,19 @@
-import { OneOf, ThemeBreakpointsKeys, ThemeBreakpointsValues, ThemeBreakpoints } from '../typings';
+import { OneOf, JssThemeBreakpointsKeys, JssThemeBreakpointsValues, JssThemeBreakpoints } from './typings';
 
 /**
  *  Composer for breakpoints
  *
  *  @param [customValues] - Custom values for breakpoints
  */
-export const createBreakpoints = (customValues: Partial<ThemeBreakpointsValues> = { }): ThemeBreakpoints => {
-  const keys: ThemeBreakpointsKeys = ['xs', 'sm', 'md', 'lg', 'xl'];
+export const createBreakpoints = (customValues: Partial<JssThemeBreakpointsValues> = { }): JssThemeBreakpoints => {
+  const keys: JssThemeBreakpointsKeys = ['xs', 'sm', 'md', 'lg', 'xl'];
   // const mappedValues = customValues.map((item) => (item === null ? undefined : item));
   // const [xs = 0, sm = 600, md = 960, lg = 1280, xl = 1920] = mappedValues;
   const { xs = 0, sm = 600, md = 960, lg = 1280, xl = 1920 } = customValues;
-  const values: Record<OneOf<ThemeBreakpointsKeys> | string, number> = { xs, sm, md, lg, xl };
+  const values: Record<OneOf<JssThemeBreakpointsKeys> | string, number> = { xs, sm, md, lg, xl };
 
   const between = (
-    start: OneOf<ThemeBreakpointsKeys> | number, end: OneOf<ThemeBreakpointsKeys> | number,
+    start: OneOf<JssThemeBreakpointsKeys> | number, end: OneOf<JssThemeBreakpointsKeys> | number,
   ): string => {
     const startValue = typeof start === 'number' ? start : values[start];
     const endValue = typeof end === 'number' ? end : values[end];
@@ -27,7 +27,7 @@ export const createBreakpoints = (customValues: Partial<ThemeBreakpointsValues> 
   };
 
   const up = (
-    key: OneOf<ThemeBreakpointsKeys> | number, to?: OneOf<ThemeBreakpointsKeys> | number,
+    key: OneOf<JssThemeBreakpointsKeys> | number, to?: OneOf<JssThemeBreakpointsKeys> | number,
   ): string => {
     const value = typeof key === 'number' ? key : values[key];
 
@@ -37,7 +37,7 @@ export const createBreakpoints = (customValues: Partial<ThemeBreakpointsValues> 
   };
 
   const down = (
-    key: OneOf<ThemeBreakpointsKeys> | number, to?: OneOf<ThemeBreakpointsKeys> | number,
+    key: OneOf<JssThemeBreakpointsKeys> | number, to?: OneOf<JssThemeBreakpointsKeys> | number,
   ): string => {
     const value = typeof key === 'number' ? key : values[key];
     if (!to) return `@media screen and (max-width: ${value}px)`;
@@ -45,7 +45,7 @@ export const createBreakpoints = (customValues: Partial<ThemeBreakpointsValues> 
     return between(to, key);
   };
 
-  const only = (key: OneOf<ThemeBreakpointsKeys>): string => {
+  const only = (key: OneOf<JssThemeBreakpointsKeys>): string => {
     const value = values[key];
 
     if (!value) {
@@ -60,7 +60,7 @@ export const createBreakpoints = (customValues: Partial<ThemeBreakpointsValues> 
       : `@media screen and (min-width: ${value}px)`;
   };
 
-  const width = (key: OneOf<ThemeBreakpointsKeys>): number => {
+  const width = (key: OneOf<JssThemeBreakpointsKeys>): number => {
     if (typeof key !== 'number') {
       throw Error('Only oneOf exisitng keys are allowed for this method');
     }

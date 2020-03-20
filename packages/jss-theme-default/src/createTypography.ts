@@ -1,8 +1,8 @@
 import merge from 'lodash.merge';
 
 import {
-  ThemeTypography, ThemeTypographyItem, ThemeTypographyDefaults, DeepPartial,
-} from '../typings';
+  JssThemeTypography, JssThemeTypographyItem, JssThemeTypographyDefaults, DeepPartial,
+} from './typings';
 import { pxToRem } from './mixins';
 
 /**
@@ -15,7 +15,7 @@ import { pxToRem } from './mixins';
  */
 export const createTypographyItem = (
   fontFamily: string, fontWeight: number | string, fontSize: number | string, lineHeight: number | string,
-): ThemeTypographyItem => ({
+): JssThemeTypographyItem => ({
   fontFamily,
   fontWeight,
   fontSize,
@@ -28,8 +28,8 @@ export const createTypographyItem = (
  *  @param config - Optional typography config
  */
 export const createTypographyDefaults = (
-  config: ThemeTypographyDefaults = {},
-): Required<ThemeTypographyDefaults> => {
+  config: JssThemeTypographyDefaults = {},
+): Required<JssThemeTypographyDefaults> => {
   const {
     htmlFontSize = 16,
     lineHeight = 1.2,
@@ -55,8 +55,8 @@ export const createTypographyDefaults = (
  *  Creates Theme typography
  */
 export const createTypography = (
-  typography: DeepPartial<ThemeTypography> = { },
-): ThemeTypography => {
+  typography: DeepPartial<JssThemeTypography> = { },
+): JssThemeTypography => {
   /* eslint-disable no-param-reassign */
   if (!typography) typography = {};
 

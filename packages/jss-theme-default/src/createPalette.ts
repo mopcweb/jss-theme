@@ -2,8 +2,8 @@ import merge from 'lodash.merge';
 import cloneDeep from 'lodash.clonedeep';
 
 import {
-  ThemePaletteColor, ThemePaletteGrey, ThemePaletteBasicColors, ThemePalette, DeepPartial,
-} from '../typings';
+  JssThemePaletteColor, JssThemePaletteGrey, JssThemePaletteBasicColors, JssThemePalette, DeepPartial,
+} from './typings';
 import { darken, lighten, getContrastColor, rgbToHex } from './colorManipulator';
 
 /**
@@ -11,8 +11,8 @@ import { darken, lighten, getContrastColor, rgbToHex } from './colorManipulator'
  *
  *  @param initial - Initial color, for which to create darkened versions
  */
-export const createGreyPalette = (initial: string): ThemePaletteGrey => {
-  const grey: ThemePaletteGrey = { 50: initial } as ThemePaletteGrey;
+export const createGreyPalette = (initial: string): JssThemePaletteGrey => {
+  const grey: JssThemePaletteGrey = { 50: initial } as JssThemePaletteGrey;
 
   grey[100] = rgbToHex(darken(initial, 0.017));
   grey[200] = rgbToHex(darken(grey[100], 0.025));
@@ -41,7 +41,7 @@ export const createGreyPalette = (initial: string): ThemePaletteGrey => {
  *  @param [contrastText] - Contrast text color
  *  @param [bw=true] - Whether to use only black/white colors for contrastText
  */
-export const createColor = (color: string, contrastText?: string, bw = true): ThemePaletteColor => ({
+export const createColor = (color: string, contrastText?: string, bw = true): JssThemePaletteColor => ({
   light: rgbToHex(lighten(color)),
   main: color,
   dark: rgbToHex(darken(color)),
@@ -51,7 +51,7 @@ export const createColor = (color: string, contrastText?: string, bw = true): Th
 /**
  *  Default Material Design palettes - light and dark one
  */
-const materialColors: { light: ThemePaletteBasicColors; dark: ThemePaletteBasicColors } = {
+const materialColors: { light: JssThemePaletteBasicColors; dark: JssThemePaletteBasicColors } = {
   light: {
     text: {
       primary: 'rgba(0, 0, 0, 0.87)',
@@ -116,8 +116,8 @@ const materialColors: { light: ThemePaletteBasicColors; dark: ThemePaletteBasicC
  *  @param [useMaterialDarkenMultiplier=false] - For default theme multiply darken * 1.5 according to Material Design
  */
 export const createPalette = (
-  palette: DeepPartial<ThemePalette> = { }, useMaterialDarkenMultiplier = false,
-): ThemePalette => {
+  palette: DeepPartial<JssThemePalette> = { }, useMaterialDarkenMultiplier = false,
+): JssThemePalette => {
   /* eslint-disable prefer-const */
   /* eslint-disable no-param-reassign */
   let {
@@ -133,7 +133,7 @@ export const createPalette = (
     warning = createColor('#ff9800'),
     info = createColor('#2196f3'),
     success = createColor('#4caf50'),
-    grey = { 50: '#fafafa' },
+    grey = createGreyPalette('#fafafa'),
     ...others
   } = palette;
 
@@ -159,13 +159,11 @@ export const createPalette = (
   }
 
   const greyKeys = Object.keys(grey);
-  if (!greyKeys.length) {
-    throw Error('It is necessary to provide at least one grey palette key');
-  }
-
-  if (greyKeys.length !== 14) {
-    /* eslint-disable-next-line */
-    grey = createGreyPalette((grey as any)[greyKeys[0]]);
+  if (!greyKeys.length || greyKeys.length !== 14) {
+    grey = {
+      ...createGreyPalette('#fafafa'),
+      ...grey,
+    };
   }
 
   const colors = cloneDeep(materialColors[type] || materialColors.light);

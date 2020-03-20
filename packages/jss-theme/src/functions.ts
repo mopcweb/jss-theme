@@ -1,10 +1,9 @@
-import jss, { Classes, JssOptions, StyleSheetFactoryOptions, Jss } from 'jss';
+import jss, { JssOptions, StyleSheetFactoryOptions, Jss } from 'jss';
 import preset from 'jss-preset-default';
 
-import { JssTheme, JssStyles, Replacer, DefaultTheme, DeepPartial, Named } from './typings';
+import { JssTheme, JssStyles, Replacer, DeepPartial, Named, JssClasses } from './typings';
 import { Theme } from './theme';
 
-// let DefaultThemeInstance = new Theme();
 let DefaultThemeInstance: Theme<JssTheme>;
 
 /**
@@ -20,7 +19,14 @@ export const initJss = (options: Partial<JssOptions> | boolean = true): Jss => {
   throw new Error('Please, provide correct argument: options for JSS inititalization or boolean value');
 };
 
-export const createDefaultTheme = <T extends JssTheme = DefaultTheme>(
+/**
+ *  Creates (initiates) default Theme Instance
+ *
+ *  @param [themeConfig] - Optional theme config
+ *  @param [options] - Default options for creating new stylesheets
+ *  @param [replacer] - Default replacer for theme styles
+ */
+export const createDefaultTheme = <T extends JssTheme = JssTheme>(
   themeConfig?: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
 ): Theme<T> => {
   DefaultThemeInstance = new Theme(themeConfig, options, replacer);
@@ -37,7 +43,7 @@ export const setDefaultTheme = <T extends Theme>(theme: T): void => { DefaultThe
 /**
  *  Gets default Theme instance
  */
-export const getDefaultTheme = <T extends JssTheme = DefaultTheme>(): Theme<T> => {
+export const getDefaultTheme = <T extends JssTheme = JssTheme>(): Theme<T> => {
   if (!DefaultThemeInstance) {
     throw Error('To make actions over defaultTheme first call createDefaultTheme() function, please');
   }
@@ -56,7 +62,7 @@ export const getDefaultTheme = <T extends JssTheme = DefaultTheme>(): Theme<T> =
  *  @param [replacer] - Default replacer for theme styles
  *  @param [theme] - Constructed custom theme
  */
-export const rewriteTheme = <T extends JssTheme = DefaultTheme>(
+export const rewriteTheme = <T extends JssTheme = JssTheme>(
   themeConfig: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
   theme: Theme<T> = DefaultThemeInstance as any,
 ): T => {
@@ -76,7 +82,7 @@ export const rewriteTheme = <T extends JssTheme = DefaultTheme>(
  *  @param [replacer] - Default replacer for theme styles
  *  @param [theme] - Constructed custom theme
  */
-export const updateTheme = <T extends JssTheme = DeepPartial<DefaultTheme>>(
+export const updateTheme = <T extends JssTheme = DeepPartial<JssTheme>>(
   themeConfig: DeepPartial<T>, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
   theme: Theme<T> = DefaultThemeInstance as any,
 ): T => {
@@ -94,9 +100,9 @@ export const updateTheme = <T extends JssTheme = DeepPartial<DefaultTheme>>(
  *  @param [options] - Options for creating new stylesheet (if it is not cached)
  *  @param [theme] - Constructed custom theme
  */
-export const useStyles = <T extends JssTheme = DefaultTheme>(
+export const useStyles = <T extends JssTheme = JssTheme>(
   styles: JssStyles, options?: StyleSheetFactoryOptions, theme: Theme<T> = DefaultThemeInstance as any,
-): Named<Classes> => {
+): Named<JssClasses> => {
   if (!DefaultThemeInstance) {
     throw Error('To make actions over defaultTheme first call createDefaultTheme() function, please');
   }
@@ -109,14 +115,14 @@ export const useStyles = <T extends JssTheme = DefaultTheme>(
  *
  *  @param styles - Styles to compile. Could be a function which uses theme
  */
-export const makeStyles = <T extends JssTheme = DefaultTheme>(styles: JssStyles<T>): JssStyles<T> => styles;
+export const makeStyles = <T extends JssTheme = JssTheme>(styles: JssStyles<T>): JssStyles<T> => styles;
 
 /**
  *  Gets current theme
  *
  *  @param [theme] - Constructed custom theme
  */
-export const getTheme = <T extends JssTheme = DefaultTheme>(
+export const getTheme = <T extends JssTheme = JssTheme>(
   theme: Theme<T> = DefaultThemeInstance as any,
 ): T => {
   if (!DefaultThemeInstance) {
@@ -132,7 +138,7 @@ export const getTheme = <T extends JssTheme = DefaultTheme>(
  *  @param themeConfig - DefaultTheme to check if it is equal to current
  *  @param [theme] - Constructed custom theme
  */
-export const isEqualTheme = <T extends JssTheme = DefaultTheme>(
+export const isEqualTheme = <T extends JssTheme = JssTheme>(
   themeConfig: T, theme: Theme<T> = DefaultThemeInstance as any,
 ): boolean => {
   if (!DefaultThemeInstance) {
@@ -190,5 +196,3 @@ export const updateDefaultReplacer = (
 
   return theme.updateDefaultReplacer(replacer);
 };
-
-/* eslint-enable @typescript-eslint/no-explicit-any */

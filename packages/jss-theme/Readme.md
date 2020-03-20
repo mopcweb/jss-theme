@@ -4,6 +4,8 @@
 
 Framework agnostic theming solution inspired by React MUI theming solution in order to implement something like that for Angular projects.
 
+## [Demo](https://stackblitz.com/edit/jss-theme-examples?embed=1&file=src/app/app.component.ts)
+
 ## IMPORTANT
 
 Since 1.0.0 is shipped as separate package providing only general API for working w/ Themes.
@@ -15,6 +17,7 @@ There are other packages:
 ## Notes
 
 Include necessary typescript typings.
+
 
 ## Init
 
@@ -84,7 +87,7 @@ class App implements OnInit, DoCheck {
   }
 
   public DoCheck(): void {
-    if (!isEqualTheme(this._cachedTheme)) { 
+    if (!isEqualTheme(this._cachedTheme)) {
       // OR: if (!MyTheme.isEqualTheme(this._cachedTheme)) {...}
       // OR: if (!isEqualTheme(this._cachedTheme, MyTheme)) {...}
 

@@ -6,6 +6,8 @@ Inspired by Material Design & React MUI theming.
 
 Independent part of [jss-theme](https://npmjs.org/package/jss-theme) package.
 
+## [Demo](https://stackblitz.com/edit/jss-theme-examples?embed=1&file=src/app/app.component.ts)
+
 ## Notes
 
 Include necessary typescript typings.

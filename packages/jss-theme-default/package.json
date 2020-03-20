@@ -1,6 +1,6 @@
 {
   "name": "jss-theme-default",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "JSS theming solution default Theme w/ types, structure and utils for theme creation",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -57,5 +57,5 @@
   "bugs": {
     "url": "https://github.com/mopcweb/jss-theme/issues/new"
   },
-  "homepage": "https://github.com/mopcweb/jss-theme/packages/jss-theme-default"
+  "homepage": "https://github.com/mopcweb/jss-theme/tree/master/packages/jss-theme-default"
 }

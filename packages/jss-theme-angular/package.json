@@ -1,6 +1,6 @@
 {
   "name": "jss-theme-angular",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "JSS theming solution utils for Angular",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -57,5 +57,5 @@
   "bugs": {
     "url": "https://github.com/mopcweb/jss-theme/issues/new"
   },
-  "homepage": "https://github.com/mopcweb/jss-theme/packages/jss-theme-angular"
+  "homepage": "https://github.com/mopcweb/jss-theme/tree/master/packages/jss-theme-angular"
 }

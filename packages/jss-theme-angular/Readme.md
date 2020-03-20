@@ -14,7 +14,7 @@ This bindings correctly works w/ Angular 8 and 9 __without__ Ivy.
 
 In Ivy there were introduced breaking changes so that it is impossible to use as earlier custom decorators / extend classes. [Here is an Issue](https://github.com/angular/angular/issues/31495).
 
-Still it is possible to use [this JSS Theming solution](https://www.npmjs.com/package/jss-theme) w/ Angular with Ivy, just [doing manually that work](https://www.npmjs.com/package/jss-theme#general-usage), which is done under @NgStyled and NgStyledComponent
+Still it is possible to use [this JSS Theming solution](https://www.npmjs.com/package/jss-theme) w/ Angular with Ivy, just [doing manually that work](https://www.npmjs.com/package/jss-theme#general-usage), which is done under @NgStyled and NgStyledComponent.
 
 ## Usage
 
@@ -66,6 +66,8 @@ export class SomeComponent implements OnInit, DoCheck {
 
 Class for usage with Angular components.
 Internally creates property 'classes' and puts classNames for compiled styles into it and watches for theme updates.
+
+__NOTE!__ Please be sure to set target: 'es2015' in your tsconfig.json in order to use NgStyledComponent because of Angular CLI changes.
 
 Second optional argument provides default options for creating new stylesheets.
 

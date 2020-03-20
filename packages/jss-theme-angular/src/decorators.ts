@@ -2,7 +2,7 @@
 import { StyleSheetFactoryOptions } from 'jss';
 
 import {
-  Theme, JssStyles, JssTheme, Constructor, Classes, useStyles, isEqualTheme, getTheme,
+  Theme, JssStyles, JssTheme, Constructor, JssClasses, useStyles, isEqualTheme, getTheme,
 } from 'jss-theme';
 import { isFunction, throwDecoratorError } from './helpers';
 
@@ -30,7 +30,7 @@ export function NgStyled<T extends JssTheme = JssTheme>(
 
     return (isFunction(styles)
       ? class extends Class {
-        public classes: Classes = {};
+        public classes: JssClasses = {};
 
         private _cachedTheme: T;
 
@@ -51,7 +51,7 @@ export function NgStyled<T extends JssTheme = JssTheme>(
         }
       }
       : class extends Class {
-        public classes: Classes = {};
+        public classes: JssClasses = {};
 
         public ngOnInit(): void {
           this.classes = useStyles(styles, options, theme);

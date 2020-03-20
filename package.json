@@ -18,7 +18,7 @@
     "version": "npm run version:core && npm run version:angular && npm run version:default",
     "bundle": "./node_modules/.bin/ts-node scripts/generate-bundle.ts",
     "build:core": "cd packages/jss-theme && npm run build",
-    "build:angular": "cd packages/jss-theme-angular && npm run build",
+    "build:angular": "cd packages/jss-theme-angular && npm run build --dev",
     "build:default": "cd packages/jss-theme-default && npm run build",
     "build": "npm run build:core && npm run build:angular && npm run build:default && npm run bundle",
     "drp:core": "cd packages/jss-theme && npm publish --dry-run",

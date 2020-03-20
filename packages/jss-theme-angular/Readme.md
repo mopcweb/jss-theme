@@ -8,6 +8,14 @@ Angular bindings for [jss-theme](https://npmjs.org/package/jss-theme) package.
 
 Include necessary typescript typings.
 
+## Important
+
+This bindings correctly works w/ Angular 8 and 9 __without__ Ivy.
+
+In Ivy there were introduced breaking changes so that it is impossible to use as earlier custom decorators / extend classes. [Here is an Issue](https://github.com/angular/angular/issues/31495).
+
+Still it is possible to use [this JSS Theming solution](https://www.npmjs.com/package/jss-theme) w/ Angular with Ivy, just [doing manually that work](https://www.npmjs.com/package/jss-theme#general-usage), which is done under @NgStyled and NgStyledComponent
+
 ## Usage
 
 ### @NgStyled(styles, options?, theme?)

@@ -1,6 +1,6 @@
 import { StyleSheetFactoryOptions } from 'jss';
 
-import { Theme, JssStyles, JssTheme, getTheme, useStyles, isEqualTheme, Classes } from 'jss-theme';
+import { Theme, JssStyles, JssTheme, getTheme, useStyles, isEqualTheme, JssClasses } from 'jss-theme';
 import { isFunction } from './helpers';
 
 /**
@@ -16,7 +16,7 @@ import { isFunction } from './helpers';
  *  @param [theme] - Constructed custom theme
  */
 export class NgStyledComponent<T extends JssTheme = JssTheme> {
-  public classes: Classes = {};
+  public classes: JssClasses = {};
 
   private _styles!: JssStyles;
   private _theme?: Theme<T>;

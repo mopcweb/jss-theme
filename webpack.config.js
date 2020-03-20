@@ -1,7 +1,7 @@
 /* eslint-disable  */
 const path = require("path");
 const webpack = require("webpack");
-const pkg = require('./package.json');
+const pkg = require(`${process.cwd()}/package.json`);
 
 const peerDependencies = () => {
   if (!pkg.peerDependencies) return { };
@@ -16,13 +16,13 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
-  entry: path.resolve(__dirname, './src/index.ts'),
+  entry: path.resolve(process.cwd(), './src/index.ts'),
 
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ['ts-loader'],
+        use: 'ts-loader',
         exclude: /node_modules/,
       },
     ]
@@ -31,7 +31,7 @@ module.exports = {
   externals: peerDependencies(),
 
   output: {
-    path: path.resolve(__dirname, './lib'),
+    path: path.resolve(process.cwd(), './lib'),
     filename: 'index.js',
     libraryTarget: 'commonjs',
   },

@@ -1,17 +1,6 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "declaration": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "baseUrl": ".",
     "outDir": "./lib",
   },
   "exclude": [
@@ -19,5 +8,5 @@
   ],
   "include": [
     "src/index.ts"
-  ],
+  ]
 }

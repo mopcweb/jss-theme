@@ -8,7 +8,7 @@ import { isFunction, throwDecoratorError } from './helpers';
 
 /**
  *  Decorator for injecting styles into component.
- *  Gets styles and creates classes property which holds classNames for compiled styles
+ *  Gets styles and creates classes property which holds classNames for compiled styles.
  *
  *  @note This one is specific for Angular 2+.
  *
@@ -16,17 +16,16 @@ import { isFunction, throwDecoratorError } from './helpers';
  *  @param [options] - Options for creating new stylesheet
  *  @param [theme] - Constructed custom theme
  */
-export function StyledComponent<T extends JssTheme = JssTheme>(
-  // export function NgStyled<T extends JssTheme = JssTheme>(
+export function NgStyled<T extends JssTheme = JssTheme>(
   styles: JssStyles<T>, options?: StyleSheetFactoryOptions, theme?: Theme<T>,
 ) {
   return (Class: Constructor): Constructor => {
     if (!Class.prototype.ngOnInit || !isFunction(Class.prototype.ngOnInit)) {
-      throwDecoratorError('@StyledComponent', 'ngOnInit', Class.name);
+      throwDecoratorError('@NgStyled', 'ngOnInit', Class.name);
     }
 
     if (isFunction(styles) && (!Class.prototype.ngDoCheck || !isFunction(Class.prototype.ngDoCheck))) {
-      throwDecoratorError('@StyledComponent', 'ngDoCheck', Class.name);
+      throwDecoratorError('@NgStyled', 'ngDoCheck', Class.name);
     }
 
     return (isFunction(styles)
@@ -65,7 +64,7 @@ export function StyledComponent<T extends JssTheme = JssTheme>(
 
 /* eslint-disable no-param-reassign */
 /* eslint-disable  */
-// export function StyledComponent<T extends JssTheme = JssTheme>(
+// export function NgStyled<T extends JssTheme = JssTheme>(
 //   styles: JssStyles<T>, options?: StyleSheetFactoryOptions, theme?: Theme<T>,
 // ) {
 //   return function (Class: Constructor) {

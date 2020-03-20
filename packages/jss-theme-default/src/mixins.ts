@@ -1,4 +1,4 @@
-import { JssTheme, JssThemeTypographyItems, JssThemeMixins, JssThemeConstructor, JssThemeDefault } from './typings';
+import { JssThemeTypographyItems, JssThemeMixins, JssThemeConstructor, JssThemeDefault } from './typings';
 import { createShadows } from './createShadows';
 import { fade, darken, lighten, getContrastColor } from './colorManipulator';
 
@@ -8,7 +8,7 @@ import { fade, darken, lighten, getContrastColor } from './colorManipulator';
  *  @param theme - Current theme
  *  @param prop - Property name to use mixin of
  */
-export const fontMixin = <T extends JssTheme = JssTheme>(theme: T, prop: JssThemeTypographyItems): string => {
+export const fontMixin = (theme: JssThemeDefault, prop: JssThemeTypographyItems): string => {
   const { fontWeight, fontSize, lineHeight, fontFamily } = theme.typography[prop];
 
   const size = typeof fontSize === 'number' ? `${fontSize}px` : fontSize;
@@ -146,10 +146,11 @@ export function createMixins(Theme?: JssThemeConstructor<JssThemeDefault>): JssT
 
     // Mixins without binding to Theme props
     transition: (
-      transition?: string, duration = 1, delay = 0, prop = 'all',
+      transition?: string, duration = 1, delay?: number, prop = 'all',
     ): string => `${prop} ${typeof duration === 'string'
       ? duration
-      : `${duration}s`} ${transition} ${typeof delay === 'string' ? delay : `${delay}s`}`,
+      /* eslint-disable-next-line */
+      : `${duration}s`} ${transition} ${delay ? typeof delay === 'string' ? delay : `${delay}s` : ''}`,
     boxShadow: createShadows,
     gradient: {
       l: (...bps): string => createGradient('linear-gradient', bps),

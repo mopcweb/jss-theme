@@ -19,6 +19,13 @@ export const initJss = (options: Partial<JssOptions> | boolean = true): Jss => {
   throw new Error('Please, provide correct argument: options for JSS inititalization or boolean value');
 };
 
+/**
+ *  Creates (initiates) default Theme Instance
+ *
+ *  @param [themeConfig] - Optional theme config
+ *  @param [options] - Default options for creating new stylesheets
+ *  @param [replacer] - Default replacer for theme styles
+ */
 export const createDefaultTheme = <T extends JssTheme = JssTheme>(
   themeConfig?: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
 ): Theme<T> => {

@@ -5,7 +5,7 @@ import { JssThemeZIndex } from './typings';
  *
  *  @param [zIndex] - Optional overrides or number for drawer options, which one should be the smallest
  */
-export const createZIndex = (zIndex: Partial<JssThemeZIndex> = {}): JssThemeZIndex => {
+export const createZIndex = (zIndex: Partial<JssThemeZIndex> | number = {}): JssThemeZIndex => {
   const config: Partial<JssThemeZIndex> = typeof zIndex === 'number' ? { drawer: zIndex } : zIndex;
 
   return {

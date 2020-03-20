@@ -17,15 +17,6 @@ export type DeepPartial<T> = {
 };
 
 /**
- *  Jss theme object type.
- *
- *  This one could really be of any type: Array, Object, primitive ...
- *  Just when creating Theme instance be sure to provide correct typing for avoiding bugs in your application.
- */
-export type JssTheme = any & { updatedHash?: number };
-// export type JssTheme = Record<any, any> & { updatedHash?: number };
-
-/**
  *  Interface for theme color types
  */
 export type JssThemeColorTypes = 'rgb' | 'rgba' | 'hsl' | 'hsla';
@@ -471,6 +462,6 @@ export interface JssThemeDefault {
 /**
  *  Interface for custom Theme constructor
  */
-export interface JssThemeConstructor<T extends JssTheme = JssTheme> {
+export interface JssThemeConstructor<T extends any = any> {
   getTheme(): T;
 }

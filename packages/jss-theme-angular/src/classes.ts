@@ -5,11 +5,11 @@ import { isFunction } from './helpers';
 
 /**
  *  Class for usage in Angular 8+ projects with --aot compiler enabled. DON'T FORGET to call super(styles)
- *  in constructor and in ngOnInit and ngDoCheck methods for proper work
+ *  in constructor and in ngOnInit and ngDoCheck methods for proper work.
  *
- *  @note This one is anecessary because w/ AOT compiler there is no ability to use custom decorators
+ *  @note This one is alternative to @NgStyled decorator.
  *
- *  @see https://github.com/angular/angular/issues/31495
+ *  @see https://github.com/angular/angular/issues/31495.
  *
  *  @param styles - Styles to compile. Could be a function which uses theme
  *  @param [options] - Options for creating new stylesheet

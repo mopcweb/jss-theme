@@ -1,9 +1,8 @@
+import { readdirSync } from 'fs';
+import { resolve } from 'path';
 import { execSync } from 'child_process';
 
-/* eslint-disable-next-line */
-// const pkg = require('./package.json');
-
-const packages = ['jss-theme', 'jss-theme-angular', 'jss-theme-default'];
+const packages = readdirSync(resolve(process.cwd(), 'packages'));
 
 export const createGeneralBundle = (): void => {
   console.log('> Generating general bundle ...');
@@ -12,7 +11,7 @@ export const createGeneralBundle = (): void => {
 
   packages.forEach((item) => {
     execSync(`mkdir -p lib/${item}`);
-    execSync(`cp -r ${__dirname}/packages/${item}/lib/ ${__dirname}/lib/${item}`);
+    execSync(`cp -r ${process.cwd()}/packages/${item}/lib/ ${process.cwd()}/lib/${item}`);
   });
 };
 

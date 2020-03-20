@@ -2,20 +2,19 @@
 
 [![npm version](https://img.shields.io/npm/v/jss-theme.svg)](https://www.npmjs.com/package/jss-theme) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mopcweb/jss-theme/blob/master/LICENSE) [![Size](https://img.shields.io/bundlephobia/minzip/jss-theme.svg)](https://npmjs.org/package/jss-theme) [![Downloads](https://img.shields.io/npm/dm/jss-theme.svg)](https://npmjs.org/package/jss-theme)
 
-Inspired by React MUI theming solution in order to implement something like that for Angular projects.
-
-Still could be used w/ any other view library or framework.
+Framework agnostic theming solution inspired by React MUI theming solution in order to implement something like that for Angular projects.
 
 ## IMPORTANT
 
-Since 0.5.2 is bundled in not minified version because in Angular it causes problem with decorators usage.
-In future minor releases this package will leave only generic code and all specific (for example Angular decorators and Class) will be removed into separate one
+Since 1.0.0 is shipped as separate package providing only general API for working w/ Themes.
+
+There are other packages:
+ - [jss-theme-default](https://npmjs.org/package/jss-theme-default) - Provides default theme configuration similar to [React MUI](https://material-ui.com/ru/customization/default-theme).
+ - [jss-theme-angular](https://npmjs.org/package/jss-theme-angular) - Provides Angular bindings to simplify work w/ this solution in Angular projects
 
 ## Notes
 
 Include necessary typescript typings.
-
-Since 0.5.0 ships w/ Default Theme. See #Default Theme
 
 ## Init
 
@@ -40,7 +39,77 @@ const options = { ... };
 jss.setup(options);
 ```
 
-## Usage for custom Theme (multiple Themes)
+### General usage
+
+```ts
+// theme.ts
+
+import { createDefaultTheme, Theme } from 'jss-theme';
+
+createDefaultTheme({ spacing: 8, color: '#ff0000' }); // Work w/ default Theme instance
+
+export const MyTheme = new Theme({ spacing: 12, color: '#f2f2f2' }); // Or create own Theme instance
+
+...
+
+// app.component.ts
+
+import { Component, OnInit, DoCheck } from '@angular/core';
+import { makeStyles, useStyles, JssClasses, JssTheme, isEqualTheme, getTheme, updateTheme } from 'jss-theme';
+
+import { MyTheme } from '../path/to/theme.ts'
+
+const styles = makeStyles((theme) => ({ //  MyTheme.makeStyles((theme) => ({ ... }))
+  App: { margin: theme.spacing },
+}));
+
+@Component({
+  template: `
+    <div [class]="classes.App">Jss styled div with margins</div>
+    <button (click)="handleUpdateTheme()">Update theme</button>
+  `,
+})
+class App implements OnInit, DoCheck {
+  public classes: JssClasses = { };
+  private _cachedTheme: JssTheme;
+
+  public ngOnInit(): void {
+    this._cachedTheme = getTheme();
+    // OR: this._cachedTheme = MyTheme.getTheme();
+    // OR: this._cachedTheme = getTheme(MyTheme);
+
+    this.classes = useStyles(styles);
+    // OR: this.classes = MyTheme.useStyles(styles);
+    // OR: this.classes = useStyles(styles, null, MyTheme);
+  }
+
+  public DoCheck(): void {
+    if (!isEqualTheme(this._cachedTheme)) { 
+      // OR: if (!MyTheme.isEqualTheme(this._cachedTheme)) {...}
+      // OR: if (!isEqualTheme(this._cachedTheme, MyTheme)) {...}
+
+      this._cachedTheme = getTheme();
+      // OR: this._cachedTheme = MyTheme.getTheme();
+      // OR: this._cachedTheme = getTheme(MyTheme);
+
+      this.classes = useStyles(styles);
+      // OR: this.classes = MyTheme.useStyles(styles);
+      // OR: this.classes = useStyles(styles, null, MyTheme);
+    }
+  }
+
+  public handleUpdateTheme(): void {
+    updateTheme({ spacing: 12 });
+    // OR: MyTheme.updateTheme({ spacing: 12 });
+    // OR: updateTheme({ spacing: 12 }, null, null, MyTheme);
+  }
+}
+
+...
+
+```
+
+## Detailed usage for custom Theme (multiple Themes)
 
 ### new Theme(themeConfig?, options?, replacer?)
 
@@ -88,7 +157,7 @@ const classes = SomeTheme.useStyles(styles);
 SomeTheme.updateTheme({ spacing: 1 });
 ```
 
-## Usage for default Theme. (This are shortcut functions for Theme instance methods)
+## Detailed usage for default Theme. (This are shortcut functions for Theme instance methods)
 
 ### createDefaultTheme(themeConfig?, options?, replacer?) => DefaultTheme
 
@@ -99,6 +168,49 @@ Third optional argument provides default replacer for compiled styles.
 
 If no first param provided - creates and returns Default Theme instance with default (Material Design) theme config.
 If provided first param - creates default Theme instance with provided config.
+
+```ts
+import { createDefaultTheme, getTheme } from 'jss-theme';
+
+createDefaultTheme({ spacing: 8 });
+
+console.log(getTheme().spacing === 8);
+```
+
+
+### getDefaultTheme() => DefaultThemeInstance
+
+Returns Default (precreated) Theme instance, which ships with package.
+
+### setDefaultTheme(Theme) => void
+
+Sets provided Theme instance as default so all shortcuts functions now will be used upon this Theme instance.
+Shortcut functions could be used as well as Theme instance methods.
+
+```ts
+import { makeStyles, useStyles, createTheme, Theme, setDefaultTheme } from 'jss-theme';
+
+// This will be called on default Theme, which is included in package
+createTheme({ spacing: 1 });
+const styles = makeStyles((theme) => ({
+	className: {
+		margin: theme.spacing * 2,
+	},
+}));
+const classes = useStyles(styles);
+
+// Create custom Theme and set it as default
+const SomeCustomTheme = new Theme({ customProp: 'top' });
+setDefaultTheme(SomeCustomTheme);
+
+// Now shortcut function calls will be executed on SomeCustomTheme
+const styles = makeStyles((theme) => ({
+	className: {
+		position: theme.customProp,
+	},
+}));
+const classes = useStyles(styles);
+```
 
 ### rewriteTheme(themeConfig, options?, replacer?, theme?) => JssTheme
 This will create initial default theme. This method could be called only once upon each Theme instance.
@@ -211,70 +323,6 @@ this.classes = updateTheme({ spacing: 10 }, SomeTheme); // Specific Theme
 this.classes = updateTheme({ spacing: 10 }); // Default Theme
 ```
 
-### @StyledComponent(styles, options?, theme?)
-Decorator for usage with Angular component. Internally creates property 'classes' and puts classNames for compiled styles into it.
-
-Second optional argument provides default options for creating new stylesheets.
-
-Third optional argument could be used to call this method on specific Theme instance:
-
-```ts
-import { Component, OnInit } from '@angular/core';
-import { makeStyles, StyledComponent, Theme } from 'jss-theme';
-
-const SomeTheme = new Theme({ spacing: 1 });
-
-const styles = makeStyles({
-	className1: {
-		display: 'flex',
-		marginTop: 10,
-	},
-});
-
-@Component({
-	template: `<div [class]="classes.className1">Jss styled div</div>`,
-	...
-})
-@StyledComponent(styles, null, Theme) // Specific Theme
-@StyledComponent(styles) // Default Theme
-export class SomeComponent implements OnInit {
-}
-```
-
-### getDefaultTheme() => DefaultThemeInstance
-
-Returns Default (precreated) Theme instance, which ships with package.
-
-### setDefaultTheme(Theme) => void
-
-Sets provided Theme instance as default so all shortcuts functions now will be used upon this Theme instance.
-Shortcut functions could be used as well as Theme instance methods.
-
-```ts
-import { makeStyles, useStyles, createTheme, Theme, setDefaultTheme } from 'jss-theme';
-
-// This will be called on default Theme, which is included in package
-createTheme({ spacing: 1 });
-const styles = makeStyles((theme) => ({
-	className: {
-		margin: theme.spacing * 2,
-	},
-}));
-const classes = useStyles(styles);
-
-// Create custom Theme and set it as default
-const SomeCustomTheme = new Theme({ customProp: 'top' });
-setDefaultTheme(SomeCustomTheme);
-
-// Now shortcut function calls will be executed on SomeCustomTheme
-const styles = makeStyles((theme) => ({
-	className: {
-		position: theme.customProp,
-	},
-}));
-const classes = useStyles(styles);
-```
-
 ### updateDefaultOptions(options, theme?) => void
 
 Updates default options for creating new stylesheets.
@@ -320,41 +368,6 @@ updateDefaultReplacer(replacer) // Default theme
 Similar to Theme instance methods.
 
 Last optional argument could be used to call this method on specific Theme instance
-
-## Default Theme
-
-Default Theme is a precreated Theme instance with signature of DefaultTheme. It was inspired by MUI + provides some new changes, as well as bunch of useful mixins.
-
-It also provides bunch of methods for  updating this theme or creating new one with similar structure:
-
-Similar structure is [here](https://material-ui.com/ru/customization/default-theme/).
-
-- __createDefaultThemeConfig(Theme, theme?) => DefaultTheme__
-	Creates structure for  DefaultTheme, with optional overrides. First param is necessary in order to bind mixins to specific Theme instance
-- __createTypography(typography?), createPalette(palette?), createBreakpoints(breakpoints?), createZIndex(zIndex?), createMixins(Theme)__ - aliases for creating DefaultTheme parts. Could be used for example for updating DefaultTheme theme. For each method it is possible provide partial overrides, for all not overridden values will be used defaults.
-- __IMPORTANT: createTypographyItem(fontFamily, fontWeight, fontSize, lineHeight) and  createPalette(palette?)__: for main colors (primary, secondary, error, info, success, warning) it is OK to provide only main shade. Functions will automatically calculate light, dark and contrastText color. Still you can provide custom for all of them.
-- __createShadows()__ - Creates shadows
-```ts
-const shadows = createShadows(
-	[1, 1, 1, 1, '#000', true],
-	{ x: 5, y: 5, blur: 5, spread: 5, color: '#000', inset: true },
-);// => inset 1px 1px 1px 1px #000, inset 5px 5px 5px 5px #000
-```
- - __createMaterialShadows(...ps)__  - Similar just using some Material Design style for creating shadows.
-[Here each 4 values represents 1 shadow](https://github.com/material-components/material-components-web/blob/be8747f94574669cb5e7add1a7c54fa41a89cec7/packages/mdc-elevation/_variables.scss):
-```ts
-const shadows = createMaterialShadows(0, 2, 1, -1, 0, 1, 1, 0, 0, 1, 3, 0);
- ```
-- __fade(color, opacity), darken(color, lvl?), lighten(color, lvl?), getContrastColor(color, bw?, black?, white?)__ Work w/ colors: transparency, getting dark / light shade, getting contrast text.
-If provided just 1 param to getContrastColor - it will invert color. If provide second boolean param -> it will get contrast (black/white color, where 3d and 4th params can override default colors for contrast black and white)
-
-
-## TODO
-
- - [ ] Provide Angular example (Stackblitz)
- - [ ] Decorators / hooks for React
- - [ ] Provide React example (Stackblitz)
- - [ ] Provide Docs website
 
 ## License
 

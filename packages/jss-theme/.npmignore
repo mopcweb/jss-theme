@@ -1,5 +1,6 @@
 ### Directories
 src
+scripts
 
 ### Files
 .eslintrc
@@ -8,4 +9,3 @@ src
 nodemon.json
 tsconfig.json
 webpack.config.js
-scripts.ts

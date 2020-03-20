@@ -1,6 +1,6 @@
 ## 1.0.0 (2020-3-??)
 
-## Breaking changes
+### Breaking changes
 
 - [all] The main breaking change is that now there is 3 separate packages. jss-theme package now ships only functionality for creating/updating/working w/ Theme(s). All Angular specific and DefaultTheme functionality were removed.
 
@@ -11,7 +11,7 @@
 - [jss-theme-angular] Contains all Angular specific functionality: @NgStyled decorator and NgStyledComponent class.
 - [jss-theme-angular] Implemented NgStyledComponent class. This one is alternative for @NgStyled decorator. It patches ngOnInit and (if necessary) ngDoCheck lifecycle hooks to correctly update styles.
 
-## Improvements
+### Improvements
 
 - [jss-theme]
 - [jss-theme-default]

@@ -2,8 +2,8 @@
   "events": {
     "crash": "exit"
   },
-  "watch": ["packages"],
+  "watch": ["src"],
   "ext": "ts",
-  "ignore": ["packages/**/*.spec.ts"],
-  "exec": "ts-node ./packages/**/src/index.ts"
+  "ignore": ["src/**/*.spec.ts"],
+  "exec": "ts-node ./src/index.ts"
 }

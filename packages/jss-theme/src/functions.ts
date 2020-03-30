@@ -40,16 +40,13 @@ export const createDefaultTheme = <T extends JssTheme = JssTheme>(
  */
 export const setDefaultTheme = <T extends Theme>(theme: T): void => { DefaultThemeInstance = theme; };
 
-/**
- *  Gets default Theme instance
- */
+/** Gets default Theme instance */
 export const getDefaultTheme = <T extends JssTheme = JssTheme>(): Theme<T> => {
   if (!DefaultThemeInstance) {
     throw Error('To make actions over defaultTheme first call createDefaultTheme() function, please');
   }
 
-  /* eslint-disable-next-line */
-  return DefaultThemeInstance as any;
+  return DefaultThemeInstance as Theme<T>;
 };
 
 
@@ -82,7 +79,7 @@ export const rewriteTheme = <T extends JssTheme = JssTheme>(
  *  @param [replacer] - Default replacer for theme styles
  *  @param [theme] - Constructed custom theme
  */
-export const updateTheme = <T extends JssTheme = DeepPartial<JssTheme>>(
+export const updateTheme = <T extends JssTheme = JssTheme>(
   themeConfig: DeepPartial<T>, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
   theme: Theme<T> = DefaultThemeInstance as any,
 ): T => {

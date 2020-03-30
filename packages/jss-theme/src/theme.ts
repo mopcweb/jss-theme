@@ -9,18 +9,12 @@ import {
 import { isFunction, replaceKey, createHash } from './helpers';
 // import { createDefaultThemeConfig } from './defaultTheme';
 
-/**
- *  Theme constructor, which holds all logic for styling application, providing theme.
- */
+/** Theme constructor, which holds all logic for styling application, providing theme. */
 export class Theme<T extends JssTheme = JssTheme> implements ThemeConstructor<T> {
-  /**
-   *  Current theme
-   */
+  /** Current theme */
   private _theme: T;
 
-  /**
-   *  Global options for creating Jss stylesheet
-   */
+  /** Global options for creating Jss stylesheet */
   private _options: StyleSheetFactoryOptions;
 
   /**
@@ -35,9 +29,7 @@ export class Theme<T extends JssTheme = JssTheme> implements ThemeConstructor<T>
     { pattern: ':first-child', value: ':nth-child(1)' },
   ];
 
-  /**
-   *  Cached styles
-   */
+  /** Cached styles */
   private _cache: Map<string, JssCache> = new Map();
 
   /**
@@ -51,9 +43,7 @@ export class Theme<T extends JssTheme = JssTheme> implements ThemeConstructor<T>
     // this.rewriteTheme(themeConfig || createDefaultThemeConfig() as any, options, replacer);
   }
 
-  /**
-   *  Gets current theme
-   */
+  /** Gets current theme */
   public getTheme(): T {
     return cloneDeep(this._theme);
   }
@@ -288,9 +278,7 @@ export class Theme<T extends JssTheme = JssTheme> implements ThemeConstructor<T>
     return JSON.stringify(computedStyles);
   }
 
-  /**
-   *  Creates hash for update string
-   */
+  /** Creates hash for update string */
   private createHash(): number {
     return createHash(new Date().toISOString());
   }

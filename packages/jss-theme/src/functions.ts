@@ -30,7 +30,7 @@ export const createDefaultTheme = <T extends JssTheme = JssTheme>(
   themeConfig?: T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
 ): Theme<T> => {
   DefaultThemeInstance = new Theme(themeConfig, options, replacer);
-  return DefaultThemeInstance;
+  return DefaultThemeInstance as Theme<T>;
 };
 
 /**

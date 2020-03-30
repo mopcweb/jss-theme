@@ -1,4 +1,4 @@
-# JSS Default Theme
+# JSS Default Angular
 
 [![npm version](https://img.shields.io/npm/v/jss-theme-angular.svg)](https://www.npmjs.com/package/jss-theme-angular) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mopcweb/jss-theme/blob/master/LICENSE) [![Size](https://img.shields.io/bundlephobia/minzip/jss-theme-angular.svg)](https://npmjs.org/package/jss-theme-angular) [![Downloads](https://img.shields.io/npm/dm/jss-theme-angular.svg)](https://npmjs.org/package/jss-theme-angular)
 

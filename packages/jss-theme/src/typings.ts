@@ -38,7 +38,12 @@ export type Named<T> = { [P in keyof T]: string };
  *  This one could really be of any type: Array, Object, primitive ...
  *  Just when creating Theme instance be sure to provide correct typing for avoiding bugs in your application.
  */
-export type JssTheme = any & { updatedHash?: number };
+// export type JssTheme = any & { updatedHash?: number };
+export interface JssTheme {
+  [x: string]: any;
+  [x: number]: any;
+  updatedHash?: number;
+}
 // export type JssTheme = Record<any, any> & { updatedHash?: number };
 
 /** Interface for Jss theme object */

@@ -1,6 +1,6 @@
 {
   "name": "jss-theme-angular",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "JSS theming solution utils for Angular",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

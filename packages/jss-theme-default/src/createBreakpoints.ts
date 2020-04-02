@@ -23,7 +23,7 @@ export const createBreakpoints = (customValues: Partial<JssThemeBreakpointsValue
       throw Error(`${start} is less than ${end}`);
     }
 
-    return `@media screen and (min-width: ${startValue}px) and (max-width: ${endValue}px)`;
+    return `@media screen and (min-width: ${startValue + 1}px) and (max-width: ${endValue}px)`;
   };
 
   const up = (
@@ -31,7 +31,7 @@ export const createBreakpoints = (customValues: Partial<JssThemeBreakpointsValue
   ): string => {
     const value = typeof key === 'number' ? key : values[key];
 
-    if (!to) return `@media screen and (min-width: ${value}px)`;
+    if (!to) return `@media screen and (min-width: ${value + 1}px)`;
 
     return between(key, to);
   };

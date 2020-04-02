@@ -231,13 +231,31 @@ export type JssThemeBreakpointsValues = Record<OneOf<JssThemeBreakpointsKeys>, n
  *  Interface for Theme breakpoints
  */
 export interface JssThemeBreakpoints {
+  /** Breakpoints keys */
   keys: JssThemeBreakpointsKeys;
+
+  /** Breakpoints values */
   values: JssThemeBreakpointsValues;
 
+  /** Returns min-width media query for provided value + 1. up(768) => min-width: 769px */
   up: (value: OneOf<JssThemeBreakpointsKeys> | number) => string;
+
+  /** Returns max-width media query for provided value. down(768) => max-width: 768px */
   down: (value: OneOf<JssThemeBreakpointsKeys> | number) => string;
+
+  /**
+   *  Returns min-width & max-width media query for provided values. Example:
+   *  between(768, 1024) => ( min-width: 769px) and (max-width: 1024px)
+   */
   between: (start: OneOf<JssThemeBreakpointsKeys> | number, end: OneOf<JssThemeBreakpointsKeys> | number) => string;
-  only: (value: OneOf<JssThemeBreakpointsKeys> | number) => string;
+
+  /**
+   *  Returns min-width & max-width media query for provided value. Example:
+   *  only('sm') => ( min-width: 769px) and (max-width: 1024px)
+   */
+  only: (value: OneOf<JssThemeBreakpointsKeys>) => string;
+
+  /** Returns value for provided key */
   width: (value: OneOf<JssThemeBreakpointsKeys>) => number;
 }
 

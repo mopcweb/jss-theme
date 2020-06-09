@@ -1,7 +1,7 @@
 {
+  "extends": ["airbnb-base", "plugin:@typescript-eslint/recommended", "plugin:import/typescript"],
+  "plugins": ["@typescript-eslint", "prettier", "import"],
   "parser": "@typescript-eslint/parser",
-  "extends": ["airbnb-base", "plugin:@typescript-eslint/recommended"],
-  "plugins": ["@typescript-eslint", "prettier"],
   "settings": {
     "import/parsers": {
       "@typescript-eslint/parser": [".ts"]
@@ -15,14 +15,15 @@
     "browser": "true"
   },
   "rules": {
-    # Temporary, until we managed to fix lerna - npm install bug
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    # Necessary in order to have ability to use paths in tsconfig. It will work only for aliases which start w/ "@"
+    # "import/no-unresolved": "off",
+    "import/no-unresolved": [2,  { "ignore": ["^@.*"] }],
 
     # Extra rule for us< as we have devs working on different
     "linebreak-style": ["error", "unix"],
 
     # Allow import from files without extensions ('./SomeService' instead of './SomeService.ts')
-    "import/extensions": ["error", "never"],
+    "import/extensions": [ "error", "ignorePackages", { "ts": "never", "js": "never" }],
 
     # Bad practice to use default export
     "import/prefer-default-export": "off",
@@ -51,7 +52,7 @@
     # Allow continue as we decided to allow ForOfStatement
     "no-continue": "off",
 
-    # Specifically to node
+    # Specificall y to node
     "no-console": "off",
 
     # They are fine sometimes.
@@ -85,7 +86,7 @@
         }],
 
         # Ordering for class members. Just defaults
-        "@typescript-eslint/member-ordering": "error"
+        "@typescript-eslint/member-ordering": ["error", { default: ["signature", "field", "constructor", "method"] }]
       }
     }
   ]

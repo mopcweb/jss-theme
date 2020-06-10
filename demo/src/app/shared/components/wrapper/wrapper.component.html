@@ -1,0 +1,52 @@
+<header [clsx]="[classes.Header, 'Wrapper']">
+  <div [clsx]="[classes.HeaderLeft]">
+    <button mat-icon-button (click)="opened = !opened"><mat-icon>menu</mat-icon></button>
+    Jss Theme
+  </div>
+
+  <div [clsx]="[classes.HeaderRight]">
+    <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>invert_colors</mat-icon></button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngFor="let item of themes" [disabled]="item.title === 'Custom'" (click)="handleChooseTheme(item)">
+        <mat-icon>{{ (theme?.title === item.title && 'radio_button_checked') || 'radio_button_unchecked' }}</mat-icon>
+        <span>{{ item.title }}</span>
+      </button>
+    </mat-menu>
+
+    <a mat-icon-button href="https://github.com/mopcweb/jss-theme" target="_blank">
+      <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7
+        1.2 0 1.9 1.2 1.9 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6
+        0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8 0 3.2.9.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5
+        5.9.5.4.9 1 .9 2.2v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3">
+        </path>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<mat-sidenav-container [clsx]="[classes.Container]">
+  <angular-breadcrumbs-light
+    separator="chevron_right"
+    separatorClass="material-icons"
+    [base]="baseUrl"
+    [routes]="routes"
+    [titles]="true"
+  ></angular-breadcrumbs-light>
+
+  <mat-sidenav #drawer [clsx]="[classes.Nav]" fixedInViewport='true' [mode]="mode" [opened]="opened">
+    <nav>
+      <ng-container *ngFor="let route of routes">
+        <a *ngIf="route.title !== 'Home'" matRipple [routerLink]="route.link">
+          <mat-icon class="Nav-Icon">{{ route.icon }}</mat-icon>
+          {{ route.title }}
+        </a>
+      </ng-container>
+    </nav>
+  </mat-sidenav>
+
+  <main [clsx]="[classes.Main, 'Wrapper']">
+    <ng-content></ng-content>
+  </main>
+</mat-sidenav-container>

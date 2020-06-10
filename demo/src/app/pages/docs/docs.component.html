@@ -1,0 +1,9 @@
+<mat-list>
+  <a *ngFor="let package of packages" [href]="package.link" target="_blank">
+    <mat-list-item [clsx]="[classes.Item]">
+      <mat-icon mat-list-icon [clsx]="[classes.Icon]">article</mat-icon>
+      <div mat-line>{{ package.name }}</div>
+      <div mat-line> {{ package.link }} </div>
+    </mat-list-item>
+  </a>
+</mat-list>

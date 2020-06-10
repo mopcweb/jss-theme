@@ -1,0 +1,9 @@
+<form [clsx]="[classes.EntityForm]">
+  <section [clsx]="[classes.Fields]">
+    <ng-content select="[formFields]"></ng-content>
+  </section>
+
+  <section [clsx]="[classes.Controls]">
+    <ng-content select="[formControls]"></ng-content>
+  </section>
+</form>

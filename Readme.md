@@ -6,6 +6,10 @@ Inspired by React MUI theming solution in order to implement something like that
 
 Still this solution is universal and framework agnostic so could be used wherever.
 
+## Demo & docs
+
+Demo and docs could be found [here](https://mopcweb.github.io/jss-theme)
+
 ## Supported versions
 
 Version | Supported

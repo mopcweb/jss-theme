@@ -27,8 +27,13 @@
 </header>
 
 <mat-sidenav-container [clsx]="[classes.Container]">
-  <angular-breadcrumbs-light [routes]="routes" separator="chevron_right" separatorClass="material-icons" [titles]="true">
-  </angular-breadcrumbs-light>
+  <angular-breadcrumbs-light
+    separator="chevron_right"
+    separatorClass="material-icons"
+    [base]="baseUrl"
+    [routes]="routes"
+    [titles]="true"
+  ></angular-breadcrumbs-light>
 
   <mat-sidenav #drawer [clsx]="[classes.Nav]" fixedInViewport='true' [mode]="mode" [opened]="opened">
     <nav>

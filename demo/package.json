@@ -1,10 +1,11 @@
 {
   "name": "jss-theme-docs",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "scripts": {
     "lint": "eslint . --ext .ts -c ../.eslintrc --ignore-path ../.eslintignore",
-    "dev": "ng serve",
-    "build": "ng build"
+    "dev": "ng serve --base-href=\"/jss-theme/\"",
+    "build": "ng build --prod --base-href=\"https://mopcweb.github.io/jss-theme/\"",
+    "deploy": "ng deploy --base-href=\"https://mopcweb.github.io/jss-theme/\""
   },
   "private": true,
   "author": "Danyil Moroz",
@@ -41,6 +42,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/lodash": "^4.14.150",
     "@types/node": "^12.11.1",
+    "angular-cli-ghpages": "^0.6.2",
     "codelyzer": "^5.1.2",
     "eslint": "^6.8.0",
     "jasmine-core": "~3.5.0",
@@ -62,5 +64,5 @@
   "bugs": {
     "url": "https://github.com/mopcweb/jss-theme/issues/new"
   },
-  "homepage": "https://github.com/mopcweb/jss-theme/tree/master/packages/jss-theme"
+  "homepage": "https://mopcweb.github.io/jss-theme"
 }

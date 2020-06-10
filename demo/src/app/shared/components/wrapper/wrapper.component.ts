@@ -3,7 +3,7 @@ import { NgStyledComponent } from 'jss-theme-angular';
 import { updateTheme } from 'jss-theme';
 import { distinctUntilKeyChanged } from 'rxjs/operators';
 
-import { LS_KEYS, routes } from '@app/utils/config';
+import { LS_KEYS, ROUTES, BASE_URL } from '@app/utils/config';
 import { IThemeConfig } from '@app/types';
 import { themes } from '@app/utils/theme';
 import { Store } from '@app/services';
@@ -22,7 +22,8 @@ export class WrapperComponent extends NgStyledComponent {
   public theme: IThemeConfig = { title: 'Light' } as IThemeConfig;
   public themes: IThemeConfig[] = themes;
 
-  public routes = routes;
+  public routes = ROUTES;
+  public baseUrl = BASE_URL;
 
   public constructor(
     private store: Store,

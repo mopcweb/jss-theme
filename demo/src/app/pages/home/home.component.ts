@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { NgStyledComponent } from 'jss-theme-angular';
 import { makeStyles } from 'jss-theme';
 
-import { routes } from '@app/utils/config';
+import { ROUTES } from '@app/utils/config';
 
 @Component({
   templateUrl: './home.component.html',
 })
 export class HomeComponent extends NgStyledComponent {
-  public links = routes.filter((item) => item.title !== 'Home');
+  public links = ROUTES.filter((item) => item.title !== 'Home');
 
   /* eslint-disable-next-line */
   public constructor() { super(styles); }

@@ -1,5 +1,6 @@
 ### Directories
 **/lib
+**/dist
 
 ### Dependencies
 **/node_modules

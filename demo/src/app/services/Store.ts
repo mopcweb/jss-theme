@@ -10,7 +10,7 @@ export class Store {
   private _state = new BehaviorSubject<State>({});
 
   public constructor() {
-    this.state$.subscribe((state) => console.log('state >>>', state));
+    // this.state$.subscribe((state) => console.log('state >>>', state));
   }
 
   /** Getter for current state */

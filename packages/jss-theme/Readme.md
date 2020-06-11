@@ -1,10 +1,14 @@
-# JSS Theming Solution
+# JSS Theme
 
 [![npm version](https://img.shields.io/npm/v/jss-theme.svg)](https://www.npmjs.com/package/jss-theme) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mopcweb/jss-theme/blob/master/LICENSE) [![Size](https://img.shields.io/bundlephobia/minzip/jss-theme.svg)](https://npmjs.org/package/jss-theme) [![Downloads](https://img.shields.io/npm/dm/jss-theme.svg)](https://npmjs.org/package/jss-theme)
 
 Framework agnostic theming solution inspired by React MUI theming solution in order to implement something like that for Angular projects.
 
-## [Demo](https://stackblitz.com/edit/jss-theme-examples?embed=1&file=src/app/app.component.ts)
+## Demo & docs
+
+Demo and docs could be found [here](https://mopcweb.github.io/jss-theme).
+
+Example in sandbox could be found [here](https://stackblitz.com/edit/jss-theme-examples?embed=1&file=src/app/app.component.ts).
 
 ## IMPORTANT
 

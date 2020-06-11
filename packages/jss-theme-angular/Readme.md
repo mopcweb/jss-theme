@@ -1,10 +1,14 @@
-# JSS Default Angular
+# JSS Theme Angular
 
 [![npm version](https://img.shields.io/npm/v/jss-theme-angular.svg)](https://www.npmjs.com/package/jss-theme-angular) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mopcweb/jss-theme/blob/master/LICENSE) [![Size](https://img.shields.io/bundlephobia/minzip/jss-theme-angular.svg)](https://npmjs.org/package/jss-theme-angular) [![Downloads](https://img.shields.io/npm/dm/jss-theme-angular.svg)](https://npmjs.org/package/jss-theme-angular)
 
 Angular bindings for [jss-theme](https://npmjs.org/package/jss-theme) package.
 
-## [Demo](https://stackblitz.com/edit/jss-theme-examples?embed=1&file=src/app/app.component.ts)
+## Demo & docs
+
+Demo and docs could be found [here](https://mopcweb.github.io/jss-theme).
+
+Example in sandbox could be found [here](https://stackblitz.com/edit/jss-theme-examples?embed=1&file=src/app/app.component.ts).
 
 ## Notes
 

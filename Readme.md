@@ -8,7 +8,7 @@ Still this solution is universal and framework agnostic so could be used whereve
 
 ## Demo & docs
 
-Demo and docs could be found [here](https://mopcweb.github.io/jss-theme)
+Demo and docs could be found [here](https://mopcweb.github.io/jss-theme).
 
 ## Supported versions
 

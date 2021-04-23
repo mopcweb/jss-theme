@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet, Styles, StyleSheetFactoryOptions, Classes } from 'jss';
+import { PartialDeep } from 'type-fest';
 
 /** Classes object, which is returned after styles compilation and attaching to DOM */
 export type JssClasses = Classes;
@@ -9,13 +10,9 @@ export type JssClasses = Classes;
 export type OneOf<T extends readonly unknown[]> = T extends ReadonlyArray<infer OneOf> ? OneOf : never;
 
 /** Type for deep partial */
-export type DeepPartial<T> = {
-  [P in keyof T]?: T[P] extends Array<infer U>
-    ? Array<DeepPartial<U>>
-    : T[P] extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepPartial<U>>
-      : DeepPartial<T[P]>
-};
+export type DeepPartial<T> = PartialDeep<T>;
+
+export type GenericObject<T = any> = { [x: string]: T };
 
 /** Class constructior type */
 export type Constructor<T = any> = new (...args: any[]) => T;

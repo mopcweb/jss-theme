@@ -1,47 +1,83 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { NgStyledComponent } from 'jss-theme-angular';
 import { createPalette } from 'jss-theme-default';
-import { makeStyles, JssTheme } from 'jss-theme';
+import { JssTheme } from 'jss-theme';
 import { Subscription } from 'rxjs';
-import { distinctUntilKeyChanged } from 'rxjs/operators';
+import { distinctUntilKeyChanged, debounceTime } from 'rxjs/operators';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 
-import { defaultTheme } from '@app/utils/theme';
+import { defaultTheme, themeProvider, RegisterComponent as UseStyles } from '@app/utils/theme';
 import { capitalize } from '@app/utils/helpers';
 import { Store } from '@app/services';
 
-/* eslint-disable-next-line */
-interface TreeNode {
+type TreeNode = {
   key: string;
   value?: GenericObject | string | number | boolean;
   children?: TreeNode[];
 }
 
+const styles = themeProvider.makeStyles((theme) => ({
+  Title: {
+    marginBottom: theme.mixins.spacing(3),
+    font: theme.mixins.font('h5'),
+    color: theme.palette.primary.main,
+  },
+
+  ColorPicker: {
+    width: '50px !important',
+    minWidth: '50px !important',
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: theme.shadows[1],
+  },
+
+  Tree: {
+    padding: theme.mixins.spacing(2, 0),
+    background: theme.palette.background.paper,
+
+    '& .mat-tree-node': {
+      height: theme.mixins.spacing(3),
+      minHeight: theme.mixins.spacing(3),
+      whiteSpace: 'nowrap',
+      color: theme.palette.text.primary,
+    },
+  },
+  NestedTree: { display: 'none' },
+  List: { paddingLeft: theme.mixins.spacing(3), overflowX: 'scroll', overflowY: 'hidden' },
+  Key: { marginRight: theme.mixins.spacing(0.5) },
+  FunctionValue: { color: theme.palette.warning.main },
+  NumberValue: { color: theme.palette.primary.main },
+  StringValue: { color: theme.palette.secondary.main },
+}));
+
 @Component({
   selector: 'jss-create-theme',
   templateUrl: './create-theme.component.html',
 })
-export class CreateThemeComponent extends NgStyledComponent implements OnDestroy {
+export class CreateThemeComponent implements OnDestroy {
+  // public classes = themeProvider.useStyles(this, styles);
+  @UseStyles(styles)
+  public classes: any;
   public form: FormGroup;
   public sub: Subscription;
+  public formSub: Subscription;
   public treeControl = new NestedTreeControl<TreeNode>((node) => node.children);
   public dataSource = new MatTreeNestedDataSource<TreeNode>();
 
   public constructor(
     public store: Store,
     private formBuilder: FormBuilder,
-    /* eslint-disable-next-line */
-  ) { super(styles); }
+  ) { }
 
   public ngOnInit(): void {
+    this.initForm();
     this.listenThemeChanges();
     this.dataSource.data = this.createTreeLikeStructure(this.store.state.theme.theme);
   }
 
   public ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
+    if (this.formSub) this.formSub.unsubscribe();
   }
 
   public isNested(_: number, node: TreeNode): boolean {
@@ -85,6 +121,7 @@ export class CreateThemeComponent extends NgStyledComponent implements OnDestroy
   private listenThemeChanges(): void {
     this.sub = this.store.state$
       .pipe(distinctUntilKeyChanged('theme'))
+      .pipe(debounceTime(100))
       .subscribe(({ theme }) => {
         this.initForm(theme.theme);
         this.dataSource.data = this.createTreeLikeStructure(this.store.state.theme.theme);
@@ -114,38 +151,8 @@ export class CreateThemeComponent extends NgStyledComponent implements OnDestroy
       backgroundPaperColor: new FormControl((item && item.palette && item.palette.background && item.palette.background.paper) || ''),
       textColor: new FormControl((item && item.palette && item.palette.text && item.palette.text.primary) || ''),
     });
+
+    // if (this.formSub) this.formSub.unsubscribe();
+    // this.formSub = this.form.valueChanges.pipe(debounceTime(50)).subscribe(() => this.handleApply());
   }
 }
-
-const styles = makeStyles((theme) => ({
-  Title: {
-    marginBottom: theme.mixins.spacing(3),
-    font: theme.mixins.font('h5'),
-    color: theme.palette.primary.main,
-  },
-
-  ColorPicker: {
-    width: '50px !important',
-    minWidth: '50px !important',
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[1],
-  },
-
-  Tree: {
-    padding: theme.mixins.spacing(2, 0),
-    background: theme.palette.background.paper,
-
-    '& .mat-tree-node': {
-      height: theme.mixins.spacing(3),
-      minHeight: theme.mixins.spacing(3),
-      whiteSpace: 'nowrap',
-      color: theme.palette.text.primary,
-    },
-  },
-  NestedTree: { display: 'none' },
-  List: { paddingLeft: theme.mixins.spacing(3), overflowX: 'scroll', overflowY: 'hidden' },
-  Key: { marginRight: theme.mixins.spacing(0.5) },
-  FunctionValue: { color: theme.palette.warning.main },
-  NumberValue: { color: theme.palette.primary.main },
-  StringValue: { color: theme.palette.secondary.main },
-}));

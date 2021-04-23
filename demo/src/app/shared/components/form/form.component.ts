@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { makeStyles } from 'jss-theme';
-import { NgStyledComponent } from 'jss-theme-angular';
 
-const styles = makeStyles((theme) => ({
+import { themeProvider } from '@app/utils/theme';
+
+const styles = themeProvider.makeStyles((theme) => ({
   EntityForm: { },
 
   Fields: {
@@ -84,6 +84,6 @@ const styles = makeStyles((theme) => ({
   selector: 'jss-form',
   templateUrl: './form.component.html',
 })
-export class FormComponent extends NgStyledComponent {
-  public constructor() { super(styles); }
+export class FormComponent {
+  public classes = themeProvider.useStyles(this, styles);
 }

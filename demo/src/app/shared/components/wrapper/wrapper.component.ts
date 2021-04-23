@@ -1,11 +1,9 @@
 import { Component, HostListener } from '@angular/core';
-import { NgStyledComponent } from 'jss-theme-angular';
-import { updateTheme } from 'jss-theme';
 import { distinctUntilKeyChanged } from 'rxjs/operators';
 
 import { LS_KEYS, ROUTES, BASE_URL } from '@app/utils/config';
 import { IThemeConfig } from '@app/types';
-import { themes } from '@app/utils/theme';
+import { themes, themeProvider } from '@app/utils/theme';
 import { Store } from '@app/services';
 
 import { styles } from './styles';
@@ -15,10 +13,11 @@ import { styles } from './styles';
   templateUrl: './wrapper.component.html',
   styles: [':host { display: block; width: 100%; height: 100% }'],
 })
-export class WrapperComponent extends NgStyledComponent {
+export class WrapperComponent {
   public mode = window.innerWidth <= 768 ? 'over' : 'side';
   public opened = !(window.innerWidth <= 768);
 
+  public classes = themeProvider.useStyles(this, styles);
   public theme: IThemeConfig = { title: 'Light' } as IThemeConfig;
   public themes: IThemeConfig[] = themes;
 
@@ -27,7 +26,7 @@ export class WrapperComponent extends NgStyledComponent {
 
   public constructor(
     private store: Store,
-  ) { super(styles); }
+  ) { }
 
   public ngOnInit(): void {
     this.theme = JSON.parse(window.localStorage.getItem(LS_KEYS.theme));
@@ -38,7 +37,7 @@ export class WrapperComponent extends NgStyledComponent {
 
         this.theme = theme;
         window.localStorage.setItem(LS_KEYS.theme, JSON.stringify(theme));
-        updateTheme(theme.theme);
+        themeProvider.updateTheme(theme.theme);
       });
   }
 

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { makeStyles } from 'jss-theme';
-import { NgStyledComponent } from 'jss-theme-angular';
+import { themeProvider } from '@app/utils/theme';
 
-const styles = makeStyles((theme) => ({
+const styles = themeProvider.makeStyles((theme) => ({
   Root: {
     display: 'flex',
     justifyContent: 'center',
@@ -25,7 +24,14 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-@Component({ templateUrl: './not-found.component.html' })
-export class NotFoundComponent extends NgStyledComponent {
-  public constructor() { super(styles); }
+@Component({
+  template: `
+    <div [clsx]="[classes.Root]">
+      <h3>Oops... Page not found</h3>
+      <a routerLink="/">Start from home</a>
+    </div>
+  `,
+})
+export class NotFoundComponent {
+  public classes = themeProvider.useStyles(this, styles);
 }

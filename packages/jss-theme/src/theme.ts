@@ -7,7 +7,6 @@ import {
   JssTheme, JssCache, JssStyles, Replacer, DeepPartial, ThemeConstructor, Named, JssClasses,
 } from './typings';
 import { isFunction, replaceKey, createHash } from './helpers';
-// import { createDefaultThemeConfig } from './defaultTheme';
 
 /** Theme constructor, which holds all logic for styling application, providing theme. */
 export class Theme<T extends JssTheme = JssTheme> implements ThemeConstructor<T> {
@@ -129,7 +128,7 @@ export class Theme<T extends JssTheme = JssTheme> implements ThemeConstructor<T>
    *  @param [replacer] - Default replacer for theme styles
    */
   public updateTheme(
-    themeConfig: DeepPartial<T>, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
+    themeConfig: DeepPartial<T> | T, options?: StyleSheetFactoryOptions, replacer?: Replacer | Replacer[],
   ): T {
     if (!themeConfig) {
       throw new Error('For updating theme it is necessary to provide themeConfig');
@@ -186,7 +185,7 @@ export class Theme<T extends JssTheme = JssTheme> implements ThemeConstructor<T>
    *
    *  @param themeConfig - Theme options for creation
    */
-  private cloneAndBind<C extends DeepPartial<T>>(themeConfig: C): C {
+  private cloneAndBind<C extends DeepPartial<T> | T>(themeConfig: C): C {
     const clone = cloneDeep(themeConfig);
 
     // It is necessary to bind mixins to current theme instance on its creation.

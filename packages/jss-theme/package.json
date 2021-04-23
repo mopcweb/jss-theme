@@ -1,6 +1,6 @@
 {
   "name": "jss-theme",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "JSS theming solution which could be used with any view library or framework",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -23,8 +23,7 @@
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
     "lodash.isequal": "^4.5.0",
-    "lodash.merge": "^4.6.2",
-    "type-fest": "1.0.2"
+    "lodash.merge": "^4.6.2"
   },
   "peerDependencies": {
     "jss": "^10.0.4",

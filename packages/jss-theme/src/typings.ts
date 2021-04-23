@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet, Styles, StyleSheetFactoryOptions, Classes } from 'jss';
-import { PartialDeep } from 'type-fest';
+import { PartialDeep } from './PartialDeep';
 
 /** Classes object, which is returned after styles compilation and attaching to DOM */
 export type JssClasses = Classes;
@@ -9,7 +9,12 @@ export type JssClasses = Classes;
 /** Type for values which are of types of provided tuple */
 export type OneOf<T extends readonly unknown[]> = T extends ReadonlyArray<infer OneOf> ? OneOf : never;
 
-/** Type for deep partial */
+/**
+ *  Deeply partial type.
+ *  This is a copy of `type-fest` PartialDeep type.
+ *
+ *  @see https://www.npmjs.com/package/type-fest
+ */
 export type DeepPartial<T> = PartialDeep<T>;
 
 export type GenericObject<T = any> = { [x: string]: T };

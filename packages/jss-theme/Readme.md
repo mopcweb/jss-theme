@@ -116,6 +116,86 @@ class App implements OnInit, DoCheck {
 
 ```
 
+## ThemeProvider, UseStyles and createJssStyledComponent
+
+### ThemeProvider
+Since version 1.1.1 `jss-theme` package provides ThemeProvider class, which internally depends on [rxjs](https://www.npmjs.com/package/rxjs) package.
+
+
+```ts
+// themeProvider.ts
+import { ThemeProvider, Theme } from 'jss-theme';
+
+interface ITheme {
+  spacing: number;
+  color: string;
+}
+
+const theme = new Theme<ITheme>({ spacing: 8, color: '#cc00cc' });
+export const themeProvider = new ThemeProvider(theme); // or const themeProvider = new ThemeProvider<ITheme>({ spacing: 8, color: '#cc00cc' });
+```
+
+Then in another component 
+
+```ts
+// component.ts
+import { themeProvider } from './path/to/themeProvider';
+
+const styles = themeProvider.makeStyles((theme) => ({ TestClass: { color: theme.color } }));
+
+class Component {
+  public classes = themeProvider.useStyles(this, styles);
+}
+```
+
+__note__ for `Angular` users. If using `OnPush` change detection strategy it would be useful to inject [ChangeDetectorRef](https://angular.io/api/core/ChangeDetectorRef) into component. `ThemeProvider` will in such way use it to `markForCheck` component.
+
+### UseStyles
+
+Decorator for class property. It adds to class property a `getter` to receive correct classes.
+
+```ts
+// component.ts
+import { makeStyles, UseStyles, JssClasses } from 'jss-theme';
+
+const styles = makeStyles((theme) => ({ TestClass: { color: theme.color } }));
+
+class Component {
+  @UseStyles(styles)
+  public classes: JssClasses;
+}
+```
+
+### createJssStyledComponent
+
+Function to create component w/ injected themeProvider.
+
+```ts
+// JssStyledComponent.ts
+import { createJssStyledComponent } from 'jss-theme';
+import { themeProvider } from './path/to/themeProvider';
+
+export const JssStyledComponent = createJssStyledComponent(themeProvider);
+```
+
+```ts
+// component.ts
+import { themeProvider } from './path/to/themeProvider';
+import { JssStyledComponent } from './path/to/JssStyledComponent';
+
+const styles = themeProvider.makeStyles((theme) => ({ TestClass: { color: theme.color } }));
+
+class Component extends JssStyledComponent {
+  constructor() {
+    super(styles);
+    console.log(this.classes);
+  }
+}
+```
+
+
+__note__ for `Angular` users. It would be better and more optimized ot use `UseStyles` combining w/ `OnPush` change detection strategy.
+
 ## Detailed usage for custom Theme (multiple Themes)
 
 ### new Theme(themeConfig?, options?, replacer?)

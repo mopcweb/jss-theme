@@ -1,13 +1,13 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { createPalette } from 'jss-theme-default';
-import { JssTheme } from 'jss-theme';
+import { JssTheme, UseStyles, JssClasses } from 'jss-theme';
 import { Subscription } from 'rxjs';
 import { distinctUntilKeyChanged, debounceTime } from 'rxjs/operators';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 
-import { defaultTheme, themeProvider, RegisterComponent as UseStyles } from '@app/utils/theme';
+import { defaultTheme, themeProvider } from '@app/utils/theme';
 import { capitalize } from '@app/utils/helpers';
 import { Store } from '@app/services';
 
@@ -57,7 +57,7 @@ const styles = themeProvider.makeStyles((theme) => ({
 export class CreateThemeComponent implements OnDestroy {
   // public classes = themeProvider.useStyles(this, styles);
   @UseStyles(styles)
-  public classes: any;
+  public classes: JssClasses;
   public form: FormGroup;
   public sub: Subscription;
   public formSub: Subscription;

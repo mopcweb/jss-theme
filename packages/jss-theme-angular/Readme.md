@@ -4,6 +4,11 @@
 
 Angular bindings for [jss-theme](https://npmjs.org/package/jss-theme) package.
 
+## Deprecated
+
+This package is deprecated for __Angular version starting from 9.__ with `Ivy` enabled.
+Please refer to this [section for new usage](#update).
+
 ## Demo & docs
 
 Demo and docs could be found [here](https://mopcweb.github.io/jss-theme).
@@ -13,6 +18,36 @@ Example in sandbox could be found [here](https://stackblitz.com/edit/jss-theme-e
 ## Notes
 
 Include necessary typescript typings.
+
+## Update
+
+As stated below both `@NgStyled` decorator and `NgStyledComponent` works bad w/ [Ivy](https://angular.io/guide/ivy) and `aot` mode.
+
+To overcome this since version v1.1.1 it is intoduced [ThemeProvide, UseStyles and createJssStyledComponent section](https://www.npmjs.com/package/jss-theme#themeprovider).
+
+Steps to easily migrate old projects:
+
+```ts
+// NgStyledComponent.ts
+import { createJssStyledComponent, ThemeProvide } from 'jss-theme'
+import { theme } from './path/to/your/app/theme';
+
+const themeProvider = new ThemeProvide(theme);
+
+const NgStyledComponent = createJssStyledComponent(themeProvider);
+```
+
+Then in your app just replace __old NgStyledComponent__ with __new__:
+
+```ts
+// import { NgStyledComponent } from 'jss-theme-angular';
+import { NgStyledComponent } from './path/to/your/app/NgStyledComponent';
+
+@Component({ ... })
+class SomeComponent extends NgStyledComponent {
+  constructor() { super(styles); }
+}
+```
 
 ## Important
 

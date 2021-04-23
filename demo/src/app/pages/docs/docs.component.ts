@@ -1,9 +1,37 @@
 import { Component } from '@angular/core';
-import { NgStyledComponent } from 'jss-theme-angular';
-import { makeStyles } from 'jss-theme';
+import { themeProvider } from '@app/utils/theme';
 
-@Component({ templateUrl: './docs.component.html' })
-export class DocsComponent extends NgStyledComponent {
+const styles = themeProvider.makeStyles((theme) => ({
+  Icon: {
+    color: `${theme.palette.secondary.main} !important`,
+  },
+  Item: {
+    color: `${theme.palette.text.primary} !important`,
+    cursor: 'pointer',
+    transition: theme.mixins.transition(theme.transitions.easing.easeOut, 0.3),
+
+    '&:hover': {
+      boxShadow: theme.shadows[1],
+    },
+  },
+}));
+
+
+@Component({
+  template: `
+    <mat-list>
+      <a *ngFor="let package of packages" [href]="package.link" target="_blank">
+        <mat-list-item [clsx]="[classes.Item]">
+          <mat-icon mat-list-icon [clsx]="[classes.Icon]">article</mat-icon>
+          <div mat-line>{{ package.name }}</div>
+          <div mat-line> {{ package.link }} </div>
+        </mat-list-item>
+      </a>
+    </mat-list>
+  `,
+})
+export class DocsComponent {
+  public classes = themeProvider.useStyles(this, styles);
   public packages = [
     {
       name: 'Jss Theme',
@@ -18,26 +46,4 @@ export class DocsComponent extends NgStyledComponent {
       link: 'https://github.com/mopcweb/jss-theme/blob/master/packages/jss-theme-angular/Readme.md#jss-default-theme',
     },
   ];
-
-  /* eslint-disable-next-line */
-  public constructor() { super(styles); }
-
-  public ngOnInit(): void {
-    //
-  }
 }
-
-const styles = makeStyles((theme) => ({
-  Icon: {
-    color: `${theme.palette.secondary.main} !important`,
-  },
-  Item: {
-    color: `${theme.palette.text.primary} !important`,
-    cursor: 'pointer',
-    transition: theme.mixins.transition(theme.transitions.easing.easeOut, 0.3),
-
-    '&:hover': {
-      boxShadow: theme.shadows[1],
-    },
-  },
-}));

@@ -1,21 +1,50 @@
 import { Component } from '@angular/core';
-import { NgStyledComponent } from 'jss-theme-angular';
 import { makeStyles } from 'jss-theme';
 
+import { NgStyledComponent } from '@app/utils/theme';
 import { ROUTES } from '@app/utils/config';
 
 @Component({
-  templateUrl: './home.component.html',
+  template: `
+    <article>
+      <header [clsx]="[classes.Header]">
+        <h1>JSS Theme</h1>
+        <div>
+          <a href="https://www.npmjs.com/package/jss-theme" target="_blank">
+            <img src="https://img.shields.io/npm/v/jss-theme.svg" alt="version" />
+          </a>
+          <a href="https://github.com/mopcweb/jss-theme/blob/master/LICENSE" target="_blank">
+            <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license" />
+          </a>
+          <a href="https://www.npmjs.com/package/jss-theme" target="_blank">
+            <img src="https://img.shields.io/npm/dm/jss-theme.svg" alt="downloads" />
+          </a>
+        </div>
+      </header>
+
+      <section [clsx]="[classes.Description]">
+        Framework agnostic theming solution inspired by React MUI theming solution
+        in order to implement something like that for Angular projects.
+      </section>
+
+      <section [clsx]="[classes.Links]">
+        <h2>Useful links:</h2>
+
+        <a *ngFor="let link of links" mat-button [routerLink]="link.link">
+          <mat-icon *ngIf="link.icon">{{ link.icon }}</mat-icon>
+          {{ link.title }}
+        </a>
+      </section>
+    </article>
+
+  `,
 })
 export class HomeComponent extends NgStyledComponent {
   public links = ROUTES.filter((item) => item.title !== 'Home');
 
-  /* eslint-disable-next-line */
-  public constructor() { super(styles); }
-
-  public ngOnInit(): void {
-    //
-  }
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  constructor() { super(styles); }
+  // public classes = themeProvider.useStyles(this, styles);
 }
 
 const styles = makeStyles((theme) => ({

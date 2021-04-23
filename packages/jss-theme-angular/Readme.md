@@ -49,6 +49,10 @@ class SomeComponent extends NgStyledComponent {
 }
 ```
 
+!!! __NOTE__ is is also necessary to change invocations of `updateTheme()` from `jss-theme` package with `themeProvider.updateTheme()` in order for `themeProvider` track theme changes.
+
+Another way is to use [UseStyles decorator](https://www.npmjs.com/package/jss-theme#usestyles).
+
 ## Important
 
 This bindings correctly works w/ Angular 8 and 9 __without__ Ivy.

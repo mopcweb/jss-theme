@@ -148,6 +148,17 @@ class Component {
 }
 ```
 
+```ts
+// component2.ts
+import { themeProvider } from './path/to/themeProvider';
+
+class Component {
+  public someMethod(): void {
+    themeProvider.updateTheme({ color: '#1c1c1c' });
+  }
+}
+```
+
 __note__ for `Angular` users. If using `OnPush` change detection strategy it would be useful to inject [ChangeDetectorRef](https://angular.io/api/core/ChangeDetectorRef) into component. `ThemeProvider` will in such way use it to `markForCheck` component.
 
 ### UseStyles

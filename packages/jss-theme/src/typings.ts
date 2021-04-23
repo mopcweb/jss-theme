@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StyleSheet, Styles, StyleSheetFactoryOptions, Classes } from 'jss';
-import { PartialDeep } from './PartialDeep';
 
 /** Classes object, which is returned after styles compilation and attaching to DOM */
 export type JssClasses = Classes;
@@ -9,13 +9,65 @@ export type JssClasses = Classes;
 /** Type for values which are of types of provided tuple */
 export type OneOf<T extends readonly unknown[]> = T extends ReadonlyArray<infer OneOf> ? OneOf : never;
 
+/** Type for deep partial */
+// export type DeepPartial<T> = DeepPartial<T>;
+
+export type Primitive =
+| null
+| undefined
+| string
+| number
+| boolean
+| symbol
+| bigint;
+
 /**
- *  Deeply partial type.
- *  This is a copy of `type-fest` PartialDeep type.
+ *  PartialDeep copy from `type-fest` package due to problems w/ build and necessaity to work w/ older versions of TS.
  *
  *  @see https://www.npmjs.com/package/type-fest
  */
-export type DeepPartial<T> = PartialDeep<T>;
+export type DeepPartial<T> = T extends Primitive
+  ? Partial<T>
+  : T extends Map<infer KeyType, infer ValueType>
+    ? PartialMapDeep<KeyType, ValueType>
+    : T extends Set<infer ItemType>
+      ? PartialSetDeep<ItemType>
+      : T extends ReadonlyMap<infer KeyType, infer ValueType>
+        ? PartialReadonlyMapDeep<KeyType, ValueType>
+        : T extends ReadonlySet<infer ItemType>
+          ? PartialReadonlySetDeep<ItemType>
+          : T extends ((...args: any[]) => unknown)
+            ? T | undefined
+            : T extends object
+              ? PartialObjectDeep<T>
+              : unknown;
+
+/**
+Same as `DeepPartial`, but accepts only `Map`s and  as inputs. Internal helper for `DeepPartial`.
+*/
+export interface PartialMapDeep<KeyType, ValueType> extends Map<DeepPartial<KeyType>, DeepPartial<ValueType>> {}
+
+/**
+Same as `DeepPartial`, but accepts only `Set`s as inputs. Internal helper for `DeepPartial`.
+*/
+export interface PartialSetDeep<T> extends Set<DeepPartial<T>> {}
+
+/**
+Same as `DeepPartial`, but accepts only `ReadonlyMap`s as inputs. Internal helper for `DeepPartial`.
+*/
+export interface PartialReadonlyMapDeep<KeyType, ValueType> extends ReadonlyMap<DeepPartial<KeyType>, DeepPartial<ValueType>> {}
+
+/**
+Same as `DeepPartial`, but accepts only `ReadonlySet`s as inputs. Internal helper for `DeepPartial`.
+*/
+export interface PartialReadonlySetDeep<T> extends ReadonlySet<DeepPartial<T>> {}
+
+/**
+Same as `DeepPartial`, but accepts only `object`s as inputs. Internal helper for `DeepPartial`.
+*/
+export type PartialObjectDeep<ObjectType extends object> = {
+  [KeyType in keyof ObjectType]?: DeepPartial<ObjectType[KeyType]>
+};
 
 export type GenericObject<T = any> = { [x: string]: T };
 

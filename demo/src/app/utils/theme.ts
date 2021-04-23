@@ -1,11 +1,15 @@
 /* eslint-disable max-classes-per-file */
-import { initJss, updateTheme, createDefaultTheme, JssTheme, JssClasses, JssStyles, isEqualTheme, useStyles, getTheme, Theme as ThemeConstructor } from 'jss-theme';
+import {
+  initJss, updateTheme, createDefaultTheme, JssTheme, JssClasses,
+  JssStyles, isEqualTheme, useStyles, getTheme, Theme as ThemeConstructor,
+  ThemeProvider,
+} from 'jss-theme';
 import { createDefaultJssTheme, createPalette } from 'jss-theme-default';
 import { StyleSheetFactoryOptions } from 'jss';
 
 import { IThemeConfig } from '@app/types';
 
-import { ThemeProvider } from './ThemeProvider';
+// import { ThemeProvider } from './ThemeProvider';
 
 initJss();
 

@@ -61,6 +61,6 @@
     "typescript": "^3.8.2",
     "typescript-eslint": "0.0.1-alpha.0",
     "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.12"
   }
 }
